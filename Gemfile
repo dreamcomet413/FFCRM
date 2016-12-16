@@ -1,28 +1,22 @@
 source 'https://rubygems.org'
+ruby '2.2.2'
 
-# Removes a gem dependency
 def remove(name)
   @dependencies.reject! { |d| d.name == name }
 end
 
-# Replaces an existing gem dependency (e.g. from gemspec) with an alternate source.
 def gem(name, *args)
   remove(name)
   super
 end
 
-# Bundler no longer treats runtime dependencies as base dependencies.
-# The following code restores this behaviour.
-# (See https://github.com/carlhuda/bundler/issues/1041)
 spec = Bundler.load_gemspec(File.expand_path("../fat_free_crm.gemspec", __FILE__))
 spec.runtime_dependencies.each do |dep|
   gem dep.name, *(dep.requirement.as_list)
 end
 
-# Remove premailer auto-require
 gem 'premailer', require: false
 
-# Remove fat_free_crm dependency, to stop it from being auto-required too early.
 remove 'fat_free_crm'
 
 group :development do
@@ -35,14 +29,14 @@ group :development do
   gem 'rb-fchange', require: false
 end
 
+# Auto deployment to AWS
 group :development do
-  gem 'capistrano',         require: false
-  gem 'capistrano-rvm',     require: false
-  gem 'capistrano-rails',   require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano3-puma',   require: false
+    gem 'capistrano',         require: false
+    gem 'capistrano-rvm',     require: false
+    gem 'capistrano-rails',   require: false
+    gem 'capistrano-bundler', require: false
+    gem 'capistrano3-puma',   require: false
 end
-
 
 group :development, :test do
   gem 'rspec-rails'

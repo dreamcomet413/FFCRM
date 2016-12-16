@@ -1,35 +1,52 @@
 server '34.194.71.217', port: 22, roles: [:web, :app, :db], primary: true
 
-set :repo_url,        'git@github.com:pracdev/FFCRM.git'
-set :application,     'FFCRM'
-set :user,            'ubuntu'
+set :scm,             :git
+set :repo_url,        'git@bitbucket.org:fatfreecrm/ffcrm.git'
 set :pty,             true
+set :user,            'ubuntu'
+set :application,     'FFCRM'
 set :use_sudo,        false
 set :stage,           :production
-set :deploy_via,      :remote_cache
-set :deploy_to,       "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
 set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+
+set :deploy_to,       "/home/#{fetch(:user)}/#{fetch(:application)}"
+set :deploy_via,      :remote_cache
+
 set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
-set :puma_threads,    [4, 16]
-set :puma_workers,    0
 set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
 set :puma_access_log, "#{release_path}/log/puma.error.log"
 set :puma_error_log,  "#{release_path}/log/puma.access.log"
+set :puma_threads,    [4, 16]
+set :puma_workers,    0
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
-set :puma_init_active_record, true
+set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 
 ## Defaults:
-# set :scm,           :git
 # set :branch,        :master
 # set :format,        :pretty
 # set :log_level,     :debug
 # set :keep_releases, 5
 
 ## Linked Files & Directories (Default None):
-# set :linked_files, %w{config/database.yml}
-# set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+# set :linked_files, %w{config/application.yml config/database.yml}
+set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+
+# Bonus! Colors are pretty!
+def red(str)
+  "\e[31m#{str}\e[0m"
+end
+
+# Figure out the name of the current local branch
+def current_git_branch
+  branch = `git symbolic-ref HEAD 2> /dev/null`.strip.gsub(/^refs\/heads\//, '')
+  puts "Deploying branch #{red branch}"
+  branch
+end
+
+# Set the deploy branch to the current branch
+set :branch, current_git_branch
 
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
@@ -44,25 +61,24 @@ namespace :puma do
 end
 
 namespace :assets do
-  desc "Preparing the seed data"
+  desc "compile assets locally and upload before finalize_update"
   task :deploy do
-      %x[bundle exec rake assets:clean && bundle exec rake assets:precompile && bundle exec rake db:migrate && bundle exec rake ffcrm:setup:admin USERNAME=admin PASSWORD=password EMAIL=admin@example.com]
+      %x[bundle exec rake assets:clean && bundle exec rake assets:precompile]
       ENV['COMMAND'] = " mkdir '#{release_path}/public/assets'"
       invoke
       upload '/#{app_dir}/public/assets', "#{release_path}/public/assets", {:recursive => true}
   end
 end
 
-
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
     on roles(:app) do
-      unless `git rev-parse HEAD` == `git rev-parse origin/master`
-        puts "WARNING: HEAD is not the same as origin/master"
-        puts "Run `git push` to sync changes."
-        exit
-      end
+      #unless `git rev-parse HEAD` == `git rev-parse origin/master`
+      #  puts "WARNING: HEAD is not the same as origin/master"
+      #  puts "Run `git push` to sync changes."
+      #  exit
+      #end
     end
   end
 
@@ -74,15 +90,19 @@ namespace :deploy do
     end
   end
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke 'puma:restart'
-    end
-  end
+  # desc 'Restart application'
+  # task :restart do
+  #   on roles(:app), in: :sequence, wait: 5 do
+  #     invoke 'puma:restart'
+  #   end
+  # end
 
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
 end
+
+# ps aux | grep puma    # Get puma pid
+# kill -s SIGUSR2 pid   # Restart puma
+# kill -s SIGTERM pid   # Stop puma
