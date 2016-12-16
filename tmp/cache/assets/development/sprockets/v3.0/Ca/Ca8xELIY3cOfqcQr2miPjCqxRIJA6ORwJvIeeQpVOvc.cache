@@ -1,0 +1,28 @@
+I"(function() {
+  (function($) {
+    window.crm || (window.crm = {});
+    crm.make_select2 = function() {
+      $(".select2").not(".select2-container, .select2-offscreen").each(function() {
+        return $(this).select2({
+          'width': 'resolve'
+        });
+      });
+      return $(".select2_tag").not(".select2-container, .select2-offscreen").each(function() {
+        return $(this).select2({
+          'width': 'resolve',
+          tags: $(this).data("tags"),
+          placeholder: $(this).data("placeholder"),
+          multiple: $(this).data("multiple")
+        });
+      });
+    };
+    $(document).ready(function() {
+      return crm.make_select2();
+    });
+    return $(document).ajaxComplete(function() {
+      return crm.make_select2();
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

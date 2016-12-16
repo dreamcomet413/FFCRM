@@ -1,0 +1,19 @@
+I"(function() {
+  (function($) {
+    $(document).on('select2-selecting', "[name*='tag_list']", function(event) {
+      var asset_id, url;
+      url = $(this).data('url');
+      asset_id = $(this).data('asset-id');
+      return $.get(url, {
+        tag: event.val,
+        asset_id: asset_id,
+        collapsed: "no"
+      });
+    });
+    return $(document).on('select2-removing', "[name*='tag_list']", function(event) {
+      return $("#field_groups div[data-tag='" + event.val + "']").remove();
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

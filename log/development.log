@@ -1,0 +1,1673 @@
+No secret key defined yet... generating and saving to Setting.secret_token
+  [1m[36m (29.5ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateSessions (20100928030598)
+  [1m[35m (0.2ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030598_create_sessions.rb:11)
+  [1m[36m (6.4ms)[0m  [1mCREATE TABLE "sessions" ("id" serial primary key, "session_id" character varying NOT NULL, "data" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.9ms)[0m  CREATE  INDEX  "index_sessions_on_session_id" ON "sessions"  ("session_id")
+  [1m[36m (3.1ms)[0m  [1mCREATE  INDEX  "index_sessions_on_updated_at" ON "sessions"  ("updated_at")[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030598"]]
+  [1m[36m (1.0ms)[0m  [1mCOMMIT[0m
+Migrating to CreateUsers (20100928030599)
+  [1m[35m (1.2ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030599_create_users.rb:32)
+  [1m[36m (8.4ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "uuid" character varying(36), "username" character varying(32) DEFAULT '' NOT NULL, "email" character varying(64) DEFAULT '' NOT NULL, "first_name" character varying(32), "last_name" character varying(32), "title" character varying(64), "company" character varying(64), "alt_email" character varying(64), "phone" character varying(32), "mobile" character varying(32), "aim" character varying(32), "yahoo" character varying(32), "google" character varying(32), "skype" character varying(32), "password_hash" character varying DEFAULT '' NOT NULL, "password_salt" character varying DEFAULT '' NOT NULL, "remember_token" character varying DEFAULT '' NOT NULL, "perishable_token" character varying DEFAULT '' NOT NULL, "openid_identifier" character varying, "last_request_at" timestamp, "last_login_at" timestamp, "current_login_at" timestamp, "last_login_ip" character varying, "current_login_ip" character varying, "login_count" integer DEFAULT 0 NOT NULL, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (7.1ms)[0m  CREATE UNIQUE INDEX  "index_users_on_username_and_deleted_at" ON "users"  ("username", "deleted_at")
+  [1m[36m (8.6ms)[0m  [1mCREATE  INDEX  "index_users_on_email" ON "users"  ("email")[0m
+  [1m[35m (2.4ms)[0m  CREATE  INDEX  "index_users_on_last_request_at" ON "users"  ("last_request_at")
+  [1m[36m (1.8ms)[0m  [1mCREATE  INDEX  "index_users_on_remember_token" ON "users"  ("remember_token")[0m
+  [1m[35m (7.5ms)[0m  CREATE  INDEX  "index_users_on_perishable_token" ON "users"  ("perishable_token")
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030599"]]
+  [1m[35m (1.4ms)[0m  COMMIT
+Migrating to CreateOpenidTables (20100928030600)
+  [1m[36m (0.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (11.7ms)[0m  CREATE TABLE "open_id_authentication_associations" ("id" serial primary key, "issued" integer, "lifetime" integer, "handle" character varying, "assoc_type" character varying, "server_url" bytea, "secret" bytea) 
+  [1m[36m (9.7ms)[0m  [1mCREATE TABLE "open_id_authentication_nonces" ("id" serial primary key, "timestamp" integer NOT NULL, "server_url" character varying, "salt" character varying NOT NULL) [0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030600"]]
+  [1m[36m (0.8ms)[0m  [1mCOMMIT[0m
+Migrating to CreateAccounts (20100928030601)
+  [1m[35m (0.3ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030601_create_accounts.rb:16)
+  [1m[36m (10.7ms)[0m  [1mCREATE TABLE "accounts" ("id" serial primary key, "uuid" character varying(36), "user_id" integer, "assigned_to" integer, "name" character varying(64) DEFAULT '' NOT NULL, "access" character varying(8) DEFAULT 'Public', "website" character varying(64), "tall_free_phone" character varying(32), "phone" character varying(32), "fax" character varying(32), "billing_address" character varying, "shipping_address" character varying, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (2.1ms)[0m  CREATE UNIQUE INDEX  "index_accounts_on_user_id_and_name_and_deleted_at" ON "accounts"  ("user_id", "name", "deleted_at")
+  [1m[36m (2.4ms)[0m  [1mCREATE  INDEX  "index_accounts_on_assigned_to" ON "accounts"  ("assigned_to")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030601"]]
+  [1m[36m (1.3ms)[0m  [1mCOMMIT[0m
+Migrating to CreatePermissions (20100928030602)
+  [1m[35m (0.4ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030602_create_permissions.rb:6)
+  [1m[36m (10.4ms)[0m  [1mCREATE TABLE "permissions" ("id" serial primary key, "user_id" integer, "asset_id" integer, "asset_type" character varying, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (2.4ms)[0m  CREATE  INDEX  "index_permissions_on_user_id" ON "permissions"  ("user_id")
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030602"]]
+  [1m[35m (2.0ms)[0m  COMMIT
+Migrating to CreateSettings (20100928030603)
+  [1m[36m (0.8ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030603_create_settings.rb:7)
+  [1m[35m (10.2ms)[0m  CREATE TABLE "settings" ("id" serial primary key, "name" character varying(32) DEFAULT '' NOT NULL, "value" text, "default_value" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (1.9ms)[0m  [1mCREATE  INDEX  "index_settings_on_name" ON "settings"  ("name")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030603"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to CreatePreferences (20100928030604)
+  [1m[35m (0.4ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030604_create_preferences.rb:7)
+  [1m[36m (5.0ms)[0m  [1mCREATE TABLE "preferences" ("id" serial primary key, "user_id" integer, "name" character varying(32) DEFAULT '' NOT NULL, "value" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (2.0ms)[0m  CREATE  INDEX  "index_preferences_on_user_id_and_name" ON "preferences"  ("user_id", "name")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030604"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to CreateCampaigns (20100928030605)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030605_create_campaigns.rb:24)
+  [1m[35m (4.1ms)[0m  CREATE TABLE "campaigns" ("id" serial primary key, "uuid" character varying(36), "user_id" integer, "assigned_to" integer, "name" character varying(64) DEFAULT '' NOT NULL, "access" character varying(8) DEFAULT 'Public', "status" character varying(64), "budget" decimal(12,2), "target_leads" integer, "target_conversion" float, "target_revenue" decimal(12,2), "leads_count" integer, "opportunities_count" integer, "revenue" decimal(12,2), "starts_on" date, "ends_on" date, "objectives" text, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.2ms)[0m  [1mCREATE UNIQUE INDEX  "index_campaigns_on_user_id_and_name_and_deleted_at" ON "campaigns"  ("user_id", "name", "deleted_at")[0m
+  [1m[35m (2.8ms)[0m  CREATE  INDEX  "index_campaigns_on_assigned_to" ON "campaigns"  ("assigned_to")
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030605"]]
+  [1m[35m (1.6ms)[0m  COMMIT
+Migrating to CreateLeads (20100928030606)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030606_create_leads.rb:28)
+  [1m[35m (8.3ms)[0m  CREATE TABLE "leads" ("id" serial primary key, "uuid" character varying(36), "user_id" integer, "campaign_id" integer, "assigned_to" integer, "first_name" character varying(64) DEFAULT '' NOT NULL, "last_name" character varying(64) DEFAULT '' NOT NULL, "access" character varying(8) DEFAULT 'Public', "title" character varying(64), "company" character varying(64), "source" character varying(32), "status" character varying(32), "referred_by" character varying(64), "email" character varying(64), "alt_email" character varying(64), "phone" character varying(32), "mobile" character varying(32), "blog" character varying(128), "linkedin" character varying(128), "facebook" character varying(128), "twitter" character varying(128), "address" character varying, "rating" integer DEFAULT 0 NOT NULL, "do_not_call" boolean DEFAULT 'f' NOT NULL, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (4.0ms)[0m  [1mCREATE UNIQUE INDEX  "index_leads_on_user_id_and_last_name_and_deleted_at" ON "leads"  ("user_id", "last_name", "deleted_at")[0m
+  [1m[35m (3.0ms)[0m  CREATE  INDEX  "index_leads_on_assigned_to" ON "leads"  ("assigned_to")
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030606"]]
+  [1m[35m (1.1ms)[0m  COMMIT
+Migrating to CreateContacts (20100928030607)
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030607_create_contacts.rb:28)
+  [1m[35m (9.7ms)[0m  CREATE TABLE "contacts" ("id" serial primary key, "uuid" character varying(36), "user_id" integer, "lead_id" integer, "assigned_to" integer, "reports_to" integer, "first_name" character varying(64) DEFAULT '' NOT NULL, "last_name" character varying(64) DEFAULT '' NOT NULL, "access" character varying(8) DEFAULT 'Public', "title" character varying(64), "department" character varying(64), "source" character varying(32), "email" character varying(64), "alt_email" character varying(64), "phone" character varying(32), "mobile" character varying(32), "fax" character varying(32), "blog" character varying(128), "linkedin" character varying(128), "facebook" character varying(128), "twitter" character varying(128), "address" character varying, "born_on" date, "do_not_call" boolean DEFAULT 'f' NOT NULL, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (4.5ms)[0m  [1mCREATE UNIQUE INDEX  "id_last_name_deleted" ON "contacts"  ("user_id", "last_name", "deleted_at")[0m
+  [1m[35m (2.3ms)[0m  CREATE  INDEX  "index_contacts_on_assigned_to" ON "contacts"  ("assigned_to")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030607"]]
+  [1m[35m (7.1ms)[0m  COMMIT
+Migrating to CreateOpportunities (20100928030608)
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030608_create_opportunities.rb:17)
+  [1m[35m (3.4ms)[0m  CREATE TABLE "opportunities" ("id" serial primary key, "uuid" character varying(36), "user_id" integer, "campaign_id" integer, "assigned_to" integer, "name" character varying(64) DEFAULT '' NOT NULL, "access" character varying(8) DEFAULT 'Public', "source" character varying(32), "stage" character varying(32), "probability" integer, "amount" decimal(12,2), "discount" decimal(12,2), "closes_on" date, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (1.7ms)[0m  [1mCREATE UNIQUE INDEX  "id_name_deleted" ON "opportunities"  ("user_id", "name", "deleted_at")[0m
+  [1m[35m (1.6ms)[0m  CREATE  INDEX  "index_opportunities_on_assigned_to" ON "opportunities"  ("assigned_to")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030608"]]
+  [1m[35m (1.0ms)[0m  COMMIT
+Migrating to CreateAccountContacts (20100928030609)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030609_create_account_contacts.rb:7)
+  [1m[35m (4.6ms)[0m  CREATE TABLE "account_contacts" ("id" serial primary key, "account_id" integer, "contact_id" integer, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030609"]]
+  [1m[35m (1.7ms)[0m  COMMIT
+Migrating to CreateAccountOpportunities (20100928030610)
+  [1m[36m (0.8ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030610_create_account_opportunities.rb:7)
+  [1m[35m (3.5ms)[0m  CREATE TABLE "account_opportunities" ("id" serial primary key, "account_id" integer, "opportunity_id" integer, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030610"]]
+  [1m[35m (0.9ms)[0m  COMMIT
+Migrating to CreateContactOpportunities (20100928030611)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030611_create_contact_opportunities.rb:8)
+  [1m[35m (4.6ms)[0m  CREATE TABLE "contact_opportunities" ("id" serial primary key, "contact_id" integer, "opportunity_id" integer, "role" character varying(32), "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030611"]]
+  [1m[35m (1.3ms)[0m  COMMIT
+Migrating to CreateTasks (20100928030612)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030612_create_tasks.rb:16)
+  [1m[35m (5.6ms)[0m  CREATE TABLE "tasks" ("id" serial primary key, "uuid" character varying(36), "user_id" integer, "assigned_to" integer, "completed_by" integer, "name" character varying DEFAULT '' NOT NULL, "asset_id" integer, "asset_type" character varying, "priority" character varying(32), "category" character varying(32), "bucket" character varying(32), "due_at" timestamp, "completed_at" timestamp, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.1ms)[0m  [1mCREATE UNIQUE INDEX  "index_tasks_on_user_id_and_name_and_deleted_at" ON "tasks"  ("user_id", "name", "deleted_at")[0m
+  [1m[35m (1.6ms)[0m  CREATE  INDEX  "index_tasks_on_assigned_to" ON "tasks"  ("assigned_to")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030612"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to CreateComments (20100928030613)
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030613_create_comments.rb:9)
+  [1m[35m (4.9ms)[0m  CREATE TABLE "comments" ("id" serial primary key, "user_id" integer, "commentable_id" integer, "commentable_type" character varying, "private" boolean, "title" character varying DEFAULT '', "comment" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030613"]]
+  [1m[35m (1.3ms)[0m  COMMIT
+Migrating to CreateActivities (20100928030614)
+  [1m[36m (0.8ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030614_create_activities.rb:9)
+  [1m[35m (4.3ms)[0m  CREATE TABLE "activities" ("id" serial primary key, "user_id" integer, "subject_id" integer, "subject_type" character varying, "action" character varying(32) DEFAULT 'created', "info" character varying DEFAULT '', "private" boolean DEFAULT 'f', "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (1.6ms)[0m  [1mCREATE  INDEX  "index_activities_on_user_id" ON "activities"  ("user_id")[0m
+  [1m[35m (1.6ms)[0m  CREATE  INDEX  "index_activities_on_created_at" ON "activities"  ("created_at")
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030614"]]
+  [1m[35m (0.9ms)[0m  COMMIT
+Migrating to CreateAvatars (20100928030615)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030615_create_avatars.rb:9)
+  [1m[35m (5.7ms)[0m  CREATE TABLE "avatars" ("id" serial primary key, "user_id" integer, "entity_id" integer, "entity_type" character varying, "image_file_size" integer, "image_file_name" character varying, "image_content_type" character varying, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030615"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to RenameRememberToken (20100928030616)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "users" RENAME COLUMN "remember_token" TO "persistence_token"
+  [1m[36m (0.3ms)[0m  [1mALTER INDEX "index_users_on_remember_token" RENAME TO "index_users_on_persistence_token"[0m
+  [1m[35m (0.6ms)[0m  ALTER TABLE "users" DROP "openid_identifier"
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030616"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+Migrating to DropOpenidTables (20100928030617)
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.1ms)[0m  DROP TABLE "open_id_authentication_associations"
+  [1m[36m (1.8ms)[0m  [1mDROP TABLE "open_id_authentication_nonces"[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030617"]]
+  [1m[36m (2.3ms)[0m  [1mCOMMIT[0m
+Migrating to AddAdminToUsers (20100928030618)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (19.6ms)[0m  [1mALTER TABLE "users" ADD "admin" boolean DEFAULT 'f' NOT NULL[0m
+  [1m[35mUser Load (1.2ms)[0m  SELECT  "users".* FROM "users"  ORDER BY "users"."id" ASC LIMIT 1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030618"]]
+  [1m[35m (1.3ms)[0m  COMMIT
+Migrating to AddSuspendedToUsers (20100928030619)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "users" ADD "suspended_at" timestamp
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "accounts" RENAME COLUMN "tall_free_phone" TO "toll_free_phone"[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030619"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+Migrating to RemoveUuid (20100928030620)
+  [1m[35m (0.5ms)[0m  BEGIN
+  [1m[36m (0.9ms)[0m  [1mALTER TABLE "users" DROP "uuid"[0m
+  [1m[35m (1.0ms)[0m  ALTER TABLE "accounts" DROP "uuid"
+  [1m[36m (0.6ms)[0m  [1mALTER TABLE "campaigns" DROP "uuid"[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "leads" DROP "uuid"
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "contacts" DROP "uuid"[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "opportunities" DROP "uuid"
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "tasks" DROP "uuid"[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030620"]]
+  [1m[36m (6.7ms)[0m  [1mCOMMIT[0m
+Migrating to AddEmailToAccounts (20100928030621)
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "accounts" ADD "email" character varying(64)[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030621"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to AddBackgroundInfoToModels (20100928030622)
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36m (0.9ms)[0m  [1mALTER TABLE "accounts" ADD "background_info" character varying[0m
+  [1m[35m (0.7ms)[0m  ALTER TABLE "campaigns" ADD "background_info" character varying
+  [1m[36m (0.7ms)[0m  [1mALTER TABLE "contacts" ADD "background_info" character varying[0m
+  [1m[35m (0.6ms)[0m  ALTER TABLE "leads" ADD "background_info" character varying
+  [1m[36m (3.4ms)[0m  [1mALTER TABLE "opportunities" ADD "background_info" character varying[0m
+  [1m[35m (1.0ms)[0m  ALTER TABLE "tasks" ADD "background_info" character varying
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030622"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to CreateAddresses (20100928030623)
+  [1m[36m (0.7ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030623_create_addresses.rb:15)
+  [1m[35m (5.1ms)[0m  CREATE TABLE "addresses" ("id" serial primary key, "street1" character varying, "street2" character varying, "city" character varying(64), "state" character varying(64), "zipcode" character varying(16), "country" character varying(64), "full_address" character varying, "address_type" character varying(16), "addressable_id" integer, "addressable_type" character varying, "created_at" timestamp, "updated_at" timestamp, "deleted_at" timestamp) 
+  [1m[36m (8.2ms)[0m  [1mCREATE  INDEX  "index_addresses_on_addressable_id_and_addressable_type" ON "addresses"  ("addressable_id", "addressable_type")[0m
+  [1m[35mContact Load (1.1ms)[0m  SELECT "contacts".* FROM "contacts"
+  [1m[36mAccount Load (1.2ms)[0m  [1mSELECT "accounts".* FROM "accounts"[0m
+  [1m[35mLead Load (0.8ms)[0m  SELECT "leads".* FROM "leads"
+  [1m[36m (1.0ms)[0m  [1mALTER TABLE "contacts" DROP "address"[0m
+  [1m[35m (0.7ms)[0m  ALTER TABLE "accounts" DROP "billing_address"
+  [1m[36m (0.6ms)[0m  [1mALTER TABLE "accounts" DROP "shipping_address"[0m
+  [1m[35m (0.6ms)[0m  ALTER TABLE "leads" DROP "address"
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030623"]]
+  [1m[35m (1.2ms)[0m  COMMIT
+Migrating to AddIndexOnPermissions (20100928030624)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (5.1ms)[0m  CREATE  INDEX  "index_permissions_on_asset_id_and_asset_type" ON "permissions"  ("asset_id", "asset_type")
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030624"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to CreateEmails (20100928030625)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20100928030625_create_emails.rb:17)
+  [1m[35m (28.2ms)[0m  CREATE TABLE "emails" ("id" serial primary key, "imap_message_id" character varying NOT NULL, "user_id" integer, "mediator_id" integer, "mediator_type" character varying, "sent_from" character varying NOT NULL, "sent_to" character varying NOT NULL, "cc" character varying, "bcc" character varying, "subject" character varying, "body" text, "header" text, "sent_at" timestamp, "received_at" timestamp, "deleted_at" timestamp, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.3ms)[0m  [1mCREATE  INDEX  "index_emails_on_mediator_id_and_mediator_type" ON "emails"  ("mediator_id", "mediator_type")[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030625"]]
+  [1m[36m (1.5ms)[0m  [1mCOMMIT[0m
+Migrating to AddStateToTimelineObjects (20100928030626)
+  [1m[35m (0.5ms)[0m  BEGIN
+  [1m[36m (23.2ms)[0m  [1mALTER TABLE "comments" ADD "state" character varying(16) DEFAULT 'Expanded' NOT NULL[0m
+  [1m[35m (11.9ms)[0m  ALTER TABLE "emails" ADD "state" character varying(16) DEFAULT 'Expanded' NOT NULL
+  [1m[36m (0.8ms)[0m  [1mUPDATE comments SET state='Expanded'[0m
+  [1m[35m (1.1ms)[0m  UPDATE emails   SET state='Expanded'
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20100928030626"]]
+  [1m[35m (2.0ms)[0m  COMMIT
+Migrating to ActsAsTaggableOnMigration (20100928030627)
+  [1m[36m (0.9ms)[0m  [1mBEGIN[0m
+  [1m[35m (9.8ms)[0m  CREATE TABLE "tags" ("id" serial primary key, "name" character varying) 
+  [1m[36m (6.9ms)[0m  [1mCREATE TABLE "taggings" ("id" serial primary key, "tag_id" integer, "taggable_id" integer, "tagger_id" integer, "tagger_type" character varying, "taggable_type" character varying(50), "context" character varying(50), "created_at" timestamp) [0m
+  [1m[35m (1.7ms)[0m  CREATE  INDEX  "index_taggings_on_tag_id" ON "taggings"  ("tag_id")
+  [1m[36m (1.9ms)[0m  [1mCREATE  INDEX  "index_taggings_on_taggable_id_and_taggable_type_and_context" ON "taggings"  ("taggable_id", "taggable_type", "context")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20100928030627"]]
+  [1m[36m (0.8ms)[0m  [1mCOMMIT[0m
+Migrating to AddSingleAccessTokenToUsers (20101221123456)
+  [1m[35m (0.5ms)[0m  BEGIN
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "users" ADD "single_access_token" character varying[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20101221123456"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+Migrating to AddRatingAndCategoryToAccounts (20101221345678)
+  [1m[35m (0.9ms)[0m  BEGIN
+  [1m[36m (58.2ms)[0m  [1mALTER TABLE "accounts" ADD "rating" integer DEFAULT 0 NOT NULL[0m
+  [1m[35m (0.8ms)[0m  ALTER TABLE "accounts" ADD "category" character varying(32)
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20101221345678"]]
+  [1m[35m (1.2ms)[0m  COMMIT
+Migrating to AddSkypeToContactsAndLeads (20110719082054)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.0ms)[0m  ALTER TABLE "contacts" ADD "skype" character varying(128)
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "leads" ADD "skype" character varying(128)[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20110719082054"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to CreateFields (20111101083437)
+  [1m[35m (0.3ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20111101083437_create_fields.rb:17)
+  [1m[36m (5.3ms)[0m  [1mCREATE TABLE "fields" ("id" serial primary key, "type" character varying, "field_group_id" integer, "klass_name" character varying(32), "position" integer, "name" character varying(64), "label" character varying(128), "hint" character varying, "placeholder" character varying, "as" character varying(32), "collection" character varying, "disabled" boolean, "required" boolean, "maxlength" integer, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (2.0ms)[0m  CREATE  INDEX  "index_fields_on_name" ON "fields"  ("name")
+  [1m[36m (2.4ms)[0m  [1mCREATE  INDEX  "index_fields_on_klass_name" ON "fields"  ("klass_name")[0m
+  [1m[35m (2.3ms)[0m  CREATE  INDEX  "index_fields_on_field_group_id" ON "fields"  ("field_group_id")
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20111101083437"]]
+  [1m[35m (1.0ms)[0m  COMMIT
+Migrating to CreateFieldGroups (20111101090312)
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in up at /home/dev/Workspace/FFCRM/db/migrate/20111101090312_create_field_groups.rb:8)
+  [1m[35m (11.8ms)[0m  CREATE TABLE "field_groups" ("id" serial primary key, "name" character varying(64), "label" character varying(128), "position" integer, "hint" character varying, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20111101090312"]]
+  [1m[35m (1.2ms)[0m  COMMIT
+Migrating to AddFieldGroupsTagId (20111116091952)
+  [1m[36m (3.8ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "field_groups" ADD "tag_id" integer
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20111116091952"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to ChangeFieldsCollectionToText (20111117041311)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.8ms)[0m  ALTER TABLE "fields" ALTER COLUMN "collection" TYPE text
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20111117041311"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to AddFieldGroupsKlassName (20111201030535)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "field_groups" ADD "klass_name" character varying(32)
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO "field_groups" ("label", "klass_name", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["label", "Custom Fields"], ["klass_name", "Account"], ["name", "custom_fields"], ["created_at", "2016-12-15 11:51:02.354717"], ["updated_at", "2016-12-15 11:51:02.354717"]]
+  [1m[35mSQL (18.9ms)[0m  UPDATE "fields" SET "field_group_id" = 1 WHERE "fields"."klass_name" = $1 AND "fields"."field_group_id" IS NULL  [["klass_name", "Account"]]
+  [1m[36mFieldGroup Load (0.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Campaign"]]
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "field_groups" ("label", "klass_name", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["label", "Custom Fields"], ["klass_name", "Campaign"], ["name", "custom_fields"], ["created_at", "2016-12-15 11:51:02.471852"], ["updated_at", "2016-12-15 11:51:02.471852"]]
+  [1m[36mSQL (0.3ms)[0m  [1mUPDATE "fields" SET "field_group_id" = 2 WHERE "fields"."klass_name" = $1 AND "fields"."field_group_id" IS NULL[0m  [["klass_name", "Campaign"]]
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "field_groups" ("label", "klass_name", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["label", "Custom Fields"], ["klass_name", "Contact"], ["name", "custom_fields"], ["created_at", "2016-12-15 11:51:02.477993"], ["updated_at", "2016-12-15 11:51:02.477993"]]
+  [1m[36mSQL (0.3ms)[0m  [1mUPDATE "fields" SET "field_group_id" = 3 WHERE "fields"."klass_name" = $1 AND "fields"."field_group_id" IS NULL[0m  [["klass_name", "Contact"]]
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "field_groups" ("label", "klass_name", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["label", "Custom Fields"], ["klass_name", "Lead"], ["name", "custom_fields"], ["created_at", "2016-12-15 11:51:02.481882"], ["updated_at", "2016-12-15 11:51:02.481882"]]
+  [1m[36mSQL (0.2ms)[0m  [1mUPDATE "fields" SET "field_group_id" = 4 WHERE "fields"."klass_name" = $1 AND "fields"."field_group_id" IS NULL[0m  [["klass_name", "Lead"]]
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "field_groups" ("label", "klass_name", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["label", "Custom Fields"], ["klass_name", "Opportunity"], ["name", "custom_fields"], ["created_at", "2016-12-15 11:51:02.485383"], ["updated_at", "2016-12-15 11:51:02.485383"]]
+  [1m[36mSQL (0.3ms)[0m  [1mUPDATE "fields" SET "field_group_id" = 5 WHERE "fields"."klass_name" = $1 AND "fields"."field_group_id" IS NULL[0m  [["klass_name", "Opportunity"]]
+  [1m[35mSQL (0.8ms)[0m  UPDATE "field_groups" SET klass_name = (SELECT MAX(klass_name) FROM fields WHERE field_group_id = field_groups.id) WHERE "field_groups"."klass_name" IS NULL
+  [1m[36m (0.7ms)[0m  [1mALTER TABLE "fields" DROP "klass_name"[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20111201030535"]]
+  [1m[36m (1.0ms)[0m  [1mCOMMIT[0m
+Migrating to CreateLists (20120121054235)
+  [1m[35m (0.3ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in change at /home/dev/Workspace/FFCRM/db/migrate/20120121054235_create_lists.rb:7)
+  [1m[36m (7.0ms)[0m  [1mCREATE TABLE "lists" ("id" serial primary key, "name" character varying, "url" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120121054235"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to CreateVersions (20120216031616)
+  [1m[35m (0.8ms)[0m  BEGIN
+  [1m[36m (13.8ms)[0m  [1mCREATE TABLE "versions" ("id" serial primary key, "item_type" character varying NOT NULL, "item_id" integer NOT NULL, "event" character varying NOT NULL, "whodunnit" character varying, "object" text, "created_at" timestamp) [0m
+  [1m[35m (2.8ms)[0m  CREATE  INDEX  "index_versions_on_item_type_and_item_id" ON "versions"  ("item_type", "item_id")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20120216031616"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to IsParanoidToPaperTrail (20120216042541)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAccount Load (0.9ms)[0m  SELECT "accounts".* FROM "accounts" WHERE (deleted_at IS NOT NULL)
+  [1m[36mCampaign Load (2.1ms)[0m  [1mSELECT "campaigns".* FROM "campaigns" WHERE (deleted_at IS NOT NULL)[0m
+  [1m[35mContact Load (0.6ms)[0m  SELECT "contacts".* FROM "contacts" WHERE (deleted_at IS NOT NULL)
+  [1m[36mLead Load (0.5ms)[0m  [1mSELECT "leads".* FROM "leads" WHERE (deleted_at IS NOT NULL)[0m
+  [1m[35mOpportunity Load (3.7ms)[0m  SELECT "opportunities".* FROM "opportunities" WHERE (deleted_at IS NOT NULL)
+  [1m[36mTask Load (1.1ms)[0m  [1mSELECT "tasks".* FROM "tasks" WHERE (deleted_at IS NOT NULL)[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120216042541"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to AddVersionsObjectChanges (20120220233724)
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "versions" ADD "object_changes" text[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120220233724"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+Migrating to RemoveDefaultValueAndClearSettings (20120224073107)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "settings" DROP "default_value"[0m
+  [1m[35m (7.3ms)[0m  TRUNCATE settings
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20120224073107"]]
+  [1m[35m (1.1ms)[0m  COMMIT
+Migrating to AddVersionsRelated (20120309070209)
+  [1m[36m (0.6ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.1ms)[0m  ALTER TABLE "versions" ADD "related_id" integer
+  [1m[36m (1.0ms)[0m  [1mALTER TABLE "versions" ADD "related_type" character varying[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120309070209"]]
+  [1m[36m (2.4ms)[0m  [1mCOMMIT[0m
+Migrating to AddSubscribedUsersToEntities (20120314080441)
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mALTER TABLE "accounts" ADD "subscribed_users" text[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "campaigns" ADD "subscribed_users" text
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "contacts" ADD "subscribed_users" text[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "leads" ADD "subscribed_users" text
+  [1m[36m (0.5ms)[0m  [1mALTER TABLE "opportunities" ADD "subscribed_users" text[0m
+  [1m[35m (0.5ms)[0m  ALTER TABLE "tasks" ADD "subscribed_users" text
+  [1m[36mComment Load (1.7ms)[0m  [1mSELECT "comments".* FROM "comments"[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120314080441"]]
+  [1m[36m (0.8ms)[0m  [1mCOMMIT[0m
+Migrating to ActivitiesToVersions (20120316045804)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (0.8ms)[0m  [1mSELECT * FROM activities[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120316045804"]]
+  [1m[36m (0.8ms)[0m  [1mCOMMIT[0m
+Migrating to ChangeSubscribedUsersToSet (20120405080727)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (2.4ms)[0m  [1m
+      SELECT id, subscribed_users
+      FROM contacts
+      WHERE subscribed_users IS NOT NULL
+        [0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120405080727"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to ChangeFurtherSubscribedUsersToSet (20120405080742)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.6ms)[0m  [1m
+        SELECT id, subscribed_users
+        FROM campaigns
+        WHERE subscribed_users IS NOT NULL
+            [0m
+  [1m[35m (0.4ms)[0m  
+        SELECT id, subscribed_users
+        FROM opportunities
+        WHERE subscribed_users IS NOT NULL
+            
+  [1m[36m (0.4ms)[0m  [1m
+        SELECT id, subscribed_users
+        FROM leads
+        WHERE subscribed_users IS NOT NULL
+            [0m
+  [1m[35m (0.4ms)[0m  
+        SELECT id, subscribed_users
+        FROM tasks
+        WHERE subscribed_users IS NOT NULL
+            
+  [1m[36m (0.5ms)[0m  [1m
+        SELECT id, subscribed_users
+        FROM accounts
+        WHERE subscribed_users IS NOT NULL
+            [0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120405080742"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to CreateGroups (20120406082136)
+  [1m[35m (0.3ms)[0m  BEGIN
+DEPRECATION WARNING: `#timestamps` was called without specifying an option for `null`. In Rails 5, this behavior will change to `null: false`. You should manually specify `null: true` to prevent the behavior of your existing migrations from changing. (called from block in change at /home/dev/Workspace/FFCRM/db/migrate/20120406082136_create_groups.rb:5)
+  [1m[36m (7.8ms)[0m  [1mCREATE TABLE "groups" ("id" serial primary key, "name" character varying, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.2ms)[0m  ALTER TABLE "permissions" ADD "group_id" integer
+  [1m[36m (3.0ms)[0m  [1mCREATE  INDEX  "index_permissions_on_group_id" ON "permissions"  ("group_id")[0m
+  [1m[35m (1.8ms)[0m  CREATE TABLE "groups_users" ("group_id" integer, "user_id" integer) 
+  [1m[36m (1.5ms)[0m  [1mCREATE  INDEX  "index_groups_users_on_group_id" ON "groups_users"  ("group_id")[0m
+  [1m[35m (1.5ms)[0m  CREATE  INDEX  "index_groups_users_on_user_id" ON "groups_users"  ("user_id")
+  [1m[36m (2.5ms)[0m  [1mCREATE  INDEX  "index_groups_users_on_group_id_and_user_id" ON "groups_users"  ("group_id", "user_id")[0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120406082136"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to AddIndexOnVersionsItemType (20120413034923)
+  [1m[35m (0.6ms)[0m  BEGIN
+  [1m[36m (3.5ms)[0m  [1mCREATE  INDEX  "index_versions_on_whodunnit" ON "versions"  ("whodunnit")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20120413034923"]]
+  [1m[36m (5.0ms)[0m  [1mCOMMIT[0m
+Migrating to AddNotNullConstraintsForTimestampColumns (20120510025219)
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20120510025219"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to IncreaseLengthOfVersionEvents (20120528102124)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (10.9ms)[0m  ALTER TABLE "versions" ALTER COLUMN "event" TYPE character varying(512)
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20120528102124"]]
+  [1m[35m (1.6ms)[0m  COMMIT
+Migrating to AddPairIdToFields (20120801032706)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "fields" ADD "pair_id" integer
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20120801032706"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to AddSettingsToCustomFields (20121003063155)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.5ms)[0m  ALTER TABLE "fields" ADD "settings" text
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20121003063155"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to FixCountryMapping (20121221033947)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSetting Load (0.4ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "have_run_country_migration"]]
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20121221033947"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to AddUserIdToLists (20131207033244)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "lists" ADD "user_id" integer
+  [1m[36m (7.0ms)[0m  [1mCREATE  INDEX  "index_lists_on_user_id" ON "lists"  ("user_id")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20131207033244"]]
+  [1m[36m (0.8ms)[0m  [1mCOMMIT[0m
+Migrating to AddCreatedAtIndexOnVersions (20140916011927)
+  [1m[35m (1.1ms)[0m  BEGIN
+  [1m[36m (2.7ms)[0m  [1mCREATE  INDEX  "index_versions_on_created_at" ON "versions"  ("created_at")[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140916011927"]]
+  [1m[36m (4.7ms)[0m  [1mCOMMIT[0m
+Migrating to AddIndexesToModelAssociations (20140916012922)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (2.3ms)[0m  [1mCREATE  INDEX  "index_contact_opportunities_on_contact_id_and_opportunity_id" ON "contact_opportunities"  ("contact_id", "opportunity_id")[0m
+  [1m[35m (3.9ms)[0m  CREATE  INDEX  "index_account_opportunities_on_account_id_and_opportunity_id" ON "account_opportunities"  ("account_id", "opportunity_id")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140916012922"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to IncreaseEmailTo254Chars (20141126031837)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "accounts" ALTER COLUMN "email" TYPE character varying(254)
+  [1m[36m (0.4ms)[0m  [1mALTER TABLE "contacts" ALTER COLUMN "email" TYPE character varying(254)[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "contacts" ALTER COLUMN "alt_email" TYPE character varying(254)
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "leads" ALTER COLUMN "email" TYPE character varying(254)[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "leads" ALTER COLUMN "alt_email" TYPE character varying(254)
+  [1m[36m (2.7ms)[0m  [1mALTER TABLE "users" ALTER COLUMN "email" TYPE character varying(254)[0m
+  [1m[35m (1.1ms)[0m  ALTER TABLE "users" ALTER COLUMN "alt_email" TYPE character varying(254)
+  [1m[36mSQL (0.9ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20141126031837"]]
+  [1m[35m (3.1ms)[0m  COMMIT
+Migrating to AddTransactionIdColumnToVersions (20141230021159)
+  [1m[36m (0.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.5ms)[0m  ALTER TABLE "versions" ADD "transaction_id" integer
+  [1m[36m (4.0ms)[0m  [1mCREATE  INDEX  "index_versions_on_transaction_id" ON "versions"  ("transaction_id")[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20141230021159"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to AddMissingUniqueIndices (20141230205453)
+  [1m[35m (0.8ms)[0m  BEGIN
+  [1m[36m (2.4ms)[0m  [1mCREATE UNIQUE INDEX  "index_tags_on_name" ON "tags"  ("name")[0m
+  [1m[35m (0.5ms)[0m  DROP INDEX "index_taggings_on_tag_id"
+  [1m[36m (0.4ms)[0m  [1mDROP INDEX "index_taggings_on_taggable_id_and_taggable_type_and_context"[0m
+  [1m[35m (3.0ms)[0m  CREATE UNIQUE INDEX  "taggings_idx" ON "taggings"  ("tag_id", "taggable_id", "taggable_type", "context")
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20141230205453"]]
+  [1m[35m (1.0ms)[0m  COMMIT
+Migrating to AddTaggingsCounterCacheToTags (20141230205454)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (6.7ms)[0m  ALTER TABLE "tags" ADD "taggings_count" integer DEFAULT 0
+  [1m[36mActsAsTaggableOn::Tag Load (0.5ms)[0m  [1mSELECT  "tags".* FROM "tags"  ORDER BY "tags"."id" ASC LIMIT 1000[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20141230205454"]]
+  [1m[36m (3.8ms)[0m  [1mCOMMIT[0m
+Migrating to AddMissingTaggableIndex (20141230205455)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (1.9ms)[0m  [1mCREATE  INDEX  "index_taggings_on_taggable_id_and_taggable_type_and_context" ON "taggings"  ("taggable_id", "taggable_type", "context")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20141230205455"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to ConvertRadioToRadioButtons (20150123060900)
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mUPDATE "fields" SET "as" = 'radio_buttons' WHERE "fields"."as" = $1[0m  [["as", "radio"]]
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20150123060900"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+Migrating to RemoveLastRequestAtFromUsers (20150227123054)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (0.7ms)[0m  [1mALTER TABLE "users" DROP "last_request_at"[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20150227123054"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to CreateIndexRelatedType (20150427131956)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (2.0ms)[0m  [1mCREATE  INDEX  "index_versions_on_related_id_and_related_type" ON "versions"  ("related_id", "related_type")[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20150427131956"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to AddAccountContactsIndex (20160511053730)
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36m (4.1ms)[0m  [1mCREATE  INDEX  "index_account_contacts_on_account_id_and_contact_id" ON "account_contacts"  ("account_id", "contact_id")[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20160511053730"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.8ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (4.8ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'account_contacts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.3ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'account_opportunities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.3ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'accounts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.3ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'activities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.5ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'addresses'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.7ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'avatars'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.5ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'campaigns'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.8ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'comments'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.4ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'contact_opportunities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.7ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'contacts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.6ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'emails'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.3ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'field_groups'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.3ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'fields'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.3ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'groups'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.4ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'groups_users'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (3.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'leads'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.4ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'lists'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'opportunities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (14.2ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'permissions'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (9.9ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'preferences'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.5ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'sessions'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'settings'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.3ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'taggings'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'tags'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.3ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'tasks'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.8ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'users'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (3.0ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'versions'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35mUser Load (0.5ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."username" = $1 LIMIT 1  [["username", "admin"]]
+  [1m[36m (0.4ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "users" WHERE "users"."email" = 'adminuser@gmail.com' LIMIT 1
+  [1m[36mUser Exists (0.9ms)[0m  [1mSELECT  1 AS one FROM "users" WHERE LOWER("users"."username") = LOWER('admin') LIMIT 1[0m
+  [1m[35mUser Exists (0.6ms)[0m  SELECT  1 AS one FROM "users" WHERE "users"."persistence_token" = '35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933' LIMIT 1
+  [1m[36mSQL (1.5ms)[0m  [1mINSERT INTO "users" ("username", "password_salt", "password_hash", "persistence_token", "email", "perishable_token", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["username", "admin"], ["password_salt", "pgXzdb1LPj5PeGLfuBrF"], ["password_hash", "921b0bf54b585fbdf54d02455bb4c9cd6f9897911c4fafd21363cf63711ee362af8c22c252b2bb94507dfaa357ee1a4590cacdf7bda4b41ad15e27079038a9f7"], ["persistence_token", "35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933"], ["email", "adminuser@gmail.com"], ["perishable_token", "4QIsOLp9YDWwZa3Fe9n"], ["created_at", "2016-12-15 11:52:07.607018"], ["updated_at", "2016-12-15 11:52:07.607018"]]
+  [1m[35mSQL (1.2ms)[0m  INSERT INTO "versions" ("event", "created_at", "object_changes", "item_id", "item_type") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["event", "create"], ["created_at", "2016-12-15 11:52:07.607018"], ["object_changes", "---\nusername:\n- ''\n- admin\npassword_salt:\n- ''\n- pgXzdb1LPj5PeGLfuBrF\npassword_hash:\n- ''\n- 921b0bf54b585fbdf54d02455bb4c9cd6f9897911c4fafd21363cf63711ee362af8c22c252b2bb94507dfaa357ee1a4590cacdf7bda4b41ad15e27079038a9f7\npersistence_token:\n- ''\n- 35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933\nemail:\n- ''\n- adminuser@gmail.com\ncreated_at:\n- \n- &1 2016-12-15 11:52:07.607018226 Z\nupdated_at:\n- \n- *1\nid:\n- \n- 1\n"], ["item_id", 1], ["item_type", "User"]]
+  [1m[36mSQL (0.5ms)[0m  [1mUPDATE "versions" SET "transaction_id" = $1 WHERE "versions"."id" = $2[0m  [["transaction_id", 1], ["id", 1]]
+  [1m[35m (0.9ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  UPDATE "users" SET "admin" = $1, "perishable_token" = $2, "updated_at" = $3 WHERE "users"."id" = $4  [["admin", "t"], ["perishable_token", "gS3QDSLAyOXHjjOrDA5"], ["updated_at", "2016-12-15 11:52:07.728164"], ["id", 1]]
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "versions" ("event", "object", "created_at", "object_changes", "item_id", "item_type") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["event", "update"], ["object", "---\nid: 1\nusername: admin\nemail: adminuser@gmail.com\nfirst_name: \nlast_name: \ntitle: \ncompany: \nalt_email: \nphone: \nmobile: \naim: \nyahoo: \ngoogle: \nskype: \npassword_hash: 921b0bf54b585fbdf54d02455bb4c9cd6f9897911c4fafd21363cf63711ee362af8c22c252b2bb94507dfaa357ee1a4590cacdf7bda4b41ad15e27079038a9f7\npassword_salt: pgXzdb1LPj5PeGLfuBrF\npersistence_token: 35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933\nperishable_token: 4QIsOLp9YDWwZa3Fe9n\nlast_login_at: \ncurrent_login_at: \nlast_login_ip: \ncurrent_login_ip: \nlogin_count: 0\ndeleted_at: \ncreated_at: &1 2016-12-15 11:52:07.607018226 Z\nupdated_at: *1\nadmin: false\nsuspended_at: \nsingle_access_token: \n"], ["created_at", "2016-12-15 11:52:07.728164"], ["object_changes", "---\nadmin:\n- false\n- true\nupdated_at:\n- 2016-12-15 11:52:07.607018226 Z\n- 2016-12-15 11:52:07.728164132 Z\n"], ["item_id", 1], ["item_type", "User"]]
+  [1m[35mSQL (0.5ms)[0m  UPDATE "versions" SET "transaction_id" = $1 WHERE "versions"."id" = $2  [["transaction_id", 2], ["id", 2]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mUPDATE "users" SET "perishable_token" = $1, "updated_at" = $2 WHERE "users"."id" = $3[0m  [["perishable_token", "2hTYEqbv5n22jAvLpIoO"], ["updated_at", "2016-12-15 11:52:07.746049"], ["id", 1]]
+  [1m[35m (1.0ms)[0m  COMMIT
+  [1m[36mSetting Load (0.9ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "smtp"]]
+  [1m[35mSetting Load (0.3ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "secret_token"]]
+No secret key defined yet... generating and saving to Setting.secret_token
+  [1m[36mFieldGroup Load (1.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Lead"]]
+  [1m[35mField Load (0.6ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 4]]
+  [1m[36mFieldGroup Load (0.5ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mField Load (0.5ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mFieldGroup Load (0.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mField Load (0.4ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (0.4ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mCustomField Load (0.5ms)[0m  SELECT  "fields".* FROM "fields" WHERE "fields"."type" IN ('CustomField')  ORDER BY "fields"."id" ASC LIMIT 1000
+
+
+Started GET "/" for 127.0.0.1 at 2016-12-15 12:56:07 +0100
+  [1m[36mActiveRecord::SchemaMigration Load (3.8ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by HomeController#index as HTML
+Redirected to http://localhost:3000/login
+Filter chain halted as :require_user rendered or redirected
+Completed 302 Found in 668ms (ActiveRecord: 4.7ms)
+
+
+Started GET "/login" for 127.0.0.1 at 2016-12-15 12:56:08 +0100
+Processing by AuthenticationsController#new as HTML
+  [1m[35mSetting Load (1.3ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "locale"]]
+  [1m[36mSetting Load (0.4ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "user_signup"]]
+  Rendered authentications/new.html.haml within layouts/application (49.4ms)
+  Rendered layouts/_header.html.haml (16.0ms)
+  Rendered layouts/_about.html.haml (8.2ms)
+  Rendered layouts/_footer.html.haml (20.1ms)
+  Rendered layouts/_tabless.html.haml (31.8ms)
+  [1m[35mSetting Load (0.6ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "base_url"]]
+Completed 200 OK in 9402ms (Views: 9392.5ms | ActiveRecord: 2.4ms)
+
+
+Started GET "/home/timezone?offset=-60" for 127.0.0.1 at 2016-12-15 12:56:20 +0100
+Processing by HomeController#timezone as */*
+  Parameters: {"offset"=>"-60"}
+  [1m[36mSetting Load (0.9ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "locale"]]
+  Rendered text template (0.0ms)
+Completed 200 OK in 318ms (Views: 27.7ms | ActiveRecord: 0.9ms)
+
+
+Started POST "/authentication" for 127.0.0.1 at 2016-12-15 12:56:32 +0100
+Processing by AuthenticationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"XXHm7jrqggiI1new9xOxvBfGLn7yntvrTvUUMq67m76jAbr5xRU5ThqqOLMQiUGrJDO+8BAAhV5kD9eN3V/y3w==", "authentication"=>{"username"=>"admin", "password"=>"[FILTERED]", "remember_me"=>"1"}}
+  [1m[35mSetting Load (0.6ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "locale"]]
+  [1m[36mUser Load (5.5ms)[0m  [1mSELECT  "users".* FROM "users" WHERE LOWER("users"."username") = LOWER('admin')  ORDER BY "users"."id" ASC LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  BEGIN
+  [1m[36mSQL (1.5ms)[0m  [1mUPDATE "users" SET "login_count" = $1, "current_login_at" = $2, "current_login_ip" = $3, "perishable_token" = $4, "updated_at" = $5 WHERE "users"."id" = $6[0m  [["login_count", 1], ["current_login_at", "2016-12-15 11:56:32.207153"], ["current_login_ip", "127.0.0.1"], ["perishable_token", "PNhUsBitttIPgJkPkJWj"], ["updated_at", "2016-12-15 11:56:32.273346"], ["id", 1]]
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "versions" ("event", "object", "created_at", "object_changes", "item_id", "item_type") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["event", "update"], ["object", "---\nid: 1\nusername: admin\nemail: adminuser@gmail.com\nfirst_name: \nlast_name: \ntitle: \ncompany: \nalt_email: \nphone: \nmobile: \naim: \nyahoo: \ngoogle: \nskype: \npassword_hash: 921b0bf54b585fbdf54d02455bb4c9cd6f9897911c4fafd21363cf63711ee362af8c22c252b2bb94507dfaa357ee1a4590cacdf7bda4b41ad15e27079038a9f7\npassword_salt: pgXzdb1LPj5PeGLfuBrF\npersistence_token: 35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933\nperishable_token: 2hTYEqbv5n22jAvLpIoO\nlast_login_at: \ncurrent_login_at: \nlast_login_ip: \ncurrent_login_ip: \nlogin_count: 0\ndeleted_at: \ncreated_at: 2016-12-15 11:52:07.607018000 Z\nupdated_at: 2016-12-15 11:52:07.746049000 Z\nadmin: true\nsuspended_at: \nsingle_access_token: \n"], ["created_at", "2016-12-15 11:56:32.273346"], ["object_changes", "---\nlogin_count:\n- 0\n- 1\ncurrent_login_at:\n- \n- 2016-12-15 11:56:32.207153914 Z\ncurrent_login_ip:\n- \n- 127.0.0.1\nupdated_at:\n- 2016-12-15 11:52:07.746049000 Z\n- 2016-12-15 11:56:32.273346402 Z\n"], ["item_id", 1], ["item_type", "User"]]
+  [1m[36mSQL (4.2ms)[0m  [1mUPDATE "versions" SET "transaction_id" = $1 WHERE "versions"."id" = $2[0m  [["transaction_id", 3], ["id", 3]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Redirected to http://localhost:3000/
+Completed 302 Found in 226ms (ActiveRecord: 16.9ms)
+
+
+Started GET "/" for 127.0.0.1 at 2016-12-15 12:56:32 +0100
+Processing by HomeController#index as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPreference Load (4.0ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "locale"], ["user_id", 1]]
+  [1m[36m (0.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  UPDATE "users" SET "single_access_token" = $1, "perishable_token" = $2, "updated_at" = $3 WHERE "users"."id" = $4  [["single_access_token", "w5mSrmDVdvrTKtFuXU0a"], ["perishable_token", "ybyp0uMwtBdvgGO1AeL"], ["updated_at", "2016-12-15 11:56:32.482327"], ["id", 1]]
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "preferences" ("user_id", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["user_id", 1], ["created_at", "2016-12-15 11:56:32.491035"], ["updated_at", "2016-12-15 11:56:32.491035"]]
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "versions" ("event", "object", "created_at", "object_changes", "item_id", "item_type") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["event", "update"], ["object", "---\nid: 1\nusername: admin\nemail: adminuser@gmail.com\nfirst_name: \nlast_name: \ntitle: \ncompany: \nalt_email: \nphone: \nmobile: \naim: \nyahoo: \ngoogle: \nskype: \npassword_hash: 921b0bf54b585fbdf54d02455bb4c9cd6f9897911c4fafd21363cf63711ee362af8c22c252b2bb94507dfaa357ee1a4590cacdf7bda4b41ad15e27079038a9f7\npassword_salt: pgXzdb1LPj5PeGLfuBrF\npersistence_token: 35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933\nperishable_token: PNhUsBitttIPgJkPkJWj\nlast_login_at: \ncurrent_login_at: 2016-12-15 11:56:32.207153000 Z\nlast_login_ip: \ncurrent_login_ip: 127.0.0.1\nlogin_count: 1\ndeleted_at: \ncreated_at: 2016-12-15 11:52:07.607018000 Z\nupdated_at: 2016-12-15 11:56:32.273346000 Z\nadmin: true\nsuspended_at: \nsingle_access_token: \n"], ["created_at", "2016-12-15 11:56:32.482327"], ["object_changes", "---\nsingle_access_token:\n- \n- w5mSrmDVdvrTKtFuXU0a\nupdated_at:\n- 2016-12-15 11:56:32.273346000 Z\n- 2016-12-15 11:56:32.482327907 Z\n"], ["item_id", 1], ["item_type", "User"]]
+  [1m[36mSQL (7.0ms)[0m  [1mUPDATE "versions" SET "transaction_id" = $1 WHERE "versions"."id" = $2[0m  [["transaction_id", 4], ["id", 4]]
+  [1m[35m (1.2ms)[0m  COMMIT
+  [1m[36mSetting Load (0.6ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "locale"]]
+  [1m[35mPreference Load (0.5ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "activity_asset"], ["user_id", 1]]
+  [1m[36mPreference Load (0.3ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_event"], ["user_id", 1]]
+  [1m[35mPreference Load (0.4ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "activity_user"], ["user_id", 1]]
+  [1m[36mPreference Load (0.7ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_duration"], ["user_id", 1]]
+  [1m[35mVersion Load (2.1ms)[0m  SELECT  "versions".* FROM "versions" WHERE (versions.created_at >= '2016-12-13 11:56:32.533150')  ORDER BY created_at DESC LIMIT 500
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" IN (NULL)[0m
+  [1m[35mUser Load (0.7ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" IN (1)
+  [1m[36mSetting Load (0.5ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "account_category_color"]]
+  [1m[35mSetting Load (0.3ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "opportunity_stage_color"]]
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "task_category_color"]]
+  Rendered shared/_inline_styles.html.haml (10.3ms)
+  [1m[35m (1.1ms)[0m  SELECT COUNT(*) FROM "tasks" WHERE ((user_id = 1 AND assigned_to IS NULL) OR assigned_to = 1) AND (completed_at IS NULL)
+  [1m[36m (1.8ms)[0m  [1mSELECT COUNT(*) FROM "opportunities" WHERE ((user_id = 1 AND assigned_to IS NULL) OR assigned_to = 1) AND (opportunities.stage != 'won') AND (opportunities.stage != 'lost')[0m
+  [1m[35m (1.6ms)[0m  SELECT COUNT(*) FROM "accounts" WHERE ((user_id = 1 AND assigned_to IS NULL) OR assigned_to = 1)
+  Rendered home/_activity.html.haml (9.7ms)
+  Rendered shared/_export.html.haml (34.6ms)
+  Rendered home/index.html.haml within layouts/application (158.5ms)
+  [1m[36mUser Load (0.7ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  Rendered layouts/_jumpbox.html.haml (10.9ms)
+  Rendered layouts/_header.html.haml (53.1ms)
+  [1m[35mSetting Load (4.9ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "tabs"]]
+  [1m[36mList Load (0.9ms)[0m  [1mSELECT "lists".* FROM "lists" WHERE "lists"."user_id" IS NULL[0m
+  Rendered lists/_sidebar.html.haml (121.0ms)
+  [1m[35mList Load (1.0ms)[0m  SELECT "lists".* FROM "lists" WHERE "lists"."user_id" = $1  [["user_id", 1]]
+  Rendered lists/_sidebar.html.haml (29.4ms)
+  Rendered lists/_lists.html.haml (226.3ms)
+  [1m[36m (0.7ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT  1 AS count_column FROM "versions" WHERE "versions"."whodunnit" = $1 AND "versions"."item_type" IN ('Account', 'Campaign', 'Contact', 'Lead', 'Opportunity') LIMIT 20 OFFSET 0) subquery_for_count[0m  [["whodunnit", "1"]]
+  Rendered shared/_recently.html.haml (21.8ms)
+  Rendered layouts/_sidebar.html.haml (313.2ms)
+  Rendered layouts/_tabbed.html.haml (348.6ms)
+  Rendered layouts/_about.html.haml (1.3ms)
+  Rendered layouts/_footer.html.haml (10.7ms)
+  [1m[35mSetting Load (0.3ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "base_url"]]
+Completed 200 OK in 2055ms (Views: 1835.6ms | ActiveRecord: 49.3ms)
+
+
+Started GET "/opportunities" for 127.0.0.1 at 2016-12-15 12:56:41 +0100
+Processing by OpportunitiesController#index as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPreference Load (0.6ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "locale"], ["user_id", 1]]
+  [1m[36mSetting Load (0.4ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "locale"]]
+  [1m[35mPreference Load (0.4ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "opportunities_per_page"], ["user_id", 1]]
+  [1m[36mPreference Load (0.6ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "opportunities_sort_by"], ["user_id", 1]]
+  [1m[35mSetting Load (2.5ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "user_signup"]]
+  [1m[36mFieldGroup Load (0.6ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Campaign"]]
+  [1m[35mField Load (0.7ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 2]]
+  [1m[36mSetting Load (0.5ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "opportunity_stage"]]
+  [1m[35m (1.3ms)[0m  SELECT COUNT(*) FROM "opportunities" WHERE ('t'='t')
+  [1m[36m (3.8ms)[0m  [1mSELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1[0m  [["stage", "prospecting"]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1  [["stage", "analysis"]]
+  [1m[36m (0.7ms)[0m  [1mSELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1[0m  [["stage", "presentation"]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1  [["stage", "proposal"]]
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1[0m  [["stage", "negotiation"]]
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1  [["stage", "final_review"]]
+  [1m[36m (0.6ms)[0m  [1mSELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1[0m  [["stage", "won"]]
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "opportunities" WHERE ('t'='t') AND "opportunities"."stage" = $1  [["stage", "lost"]]
+  [1m[36m (0.8ms)[0m  [1mSELECT DISTINCT COUNT(DISTINCT "opportunities"."id") FROM "opportunities" WHERE ('t'='t')[0m
+  [1m[35mSetting Load (0.4ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "opportunity_stage_color"]]
+  Rendered shared/_inline_styles.html.haml (2.1ms)
+  [1m[36mPreference Load (0.5ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "opportunities_index_view"], ["user_id", 1]]
+  Rendered entities/_title_bar.html.haml (20.1ms)
+  Rendered entities/_basic_search.html.haml (5.3ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_sort_fields.html.erb (54.6ms)
+  [1m[35mFieldGroup Load (1.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Opportunity"]]
+  [1m[36mField Load (0.9ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 5]]
+  [1m[35mSetting Load (0.8ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "campaign_status"]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Campaign"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 2]]
+  [1m[36mSetting Load (0.9ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "account_category"]]
+  [1m[35mFieldGroup Load (0.7ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mField Load (1.2ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mFieldGroup Load (0.8ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (0.9ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (403.1ms)
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Opportunity"]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 5]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Campaign"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 2]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (69.4ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_grouping_fields.html.erb (503.3ms)
+  [1m[35mCACHE (0.1ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Opportunity"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 5]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Campaign"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 2]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (62.7ms)
+  [1m[35mCACHE (0.1ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Opportunity"]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 5]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Campaign"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 2]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (108.6ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_grouping_fields.html.erb (189.9ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_search.html.erb (797.2ms)
+  Rendered entities/_search.html.haml (845.6ms)
+  [1m[35mCACHE (0.2ms)[0m  SELECT DISTINCT COUNT(DISTINCT "opportunities"."id") FROM "opportunities" WHERE ('t'='t')
+  Rendered shared/_empty.html.haml (18.4ms)
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT DISTINCT COUNT(DISTINCT "opportunities"."id") FROM "opportunities" WHERE ('t'='t')[0m
+  Rendered shared/_paginate_with_per_page.html.haml (32.2ms)
+  Rendered shared/_export.html.haml (2.1ms)
+  Rendered opportunities/index.html.haml within layouts/application (1060.5ms)
+  [1m[35mUser Load (0.9ms)[0m  SELECT "users".* FROM "users"
+  Rendered layouts/_jumpbox.html.haml (6.5ms)
+  Rendered layouts/_header.html.haml (16.3ms)
+  Rendered opportunities/_sidebar_index.html.haml (15.0ms)
+  [1m[36mList Load (0.8ms)[0m  [1mSELECT "lists".* FROM "lists" WHERE "lists"."user_id" IS NULL[0m
+  Rendered lists/_sidebar.html.haml (9.9ms)
+  [1m[35mList Load (0.7ms)[0m  SELECT "lists".* FROM "lists" WHERE "lists"."user_id" = $1  [["user_id", 1]]
+  Rendered lists/_sidebar.html.haml (9.3ms)
+  Rendered lists/_lists.html.haml (32.2ms)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT  1 AS count_column FROM "versions" WHERE "versions"."whodunnit" = $1 AND "versions"."item_type" IN ('Account', 'Campaign', 'Contact', 'Lead', 'Opportunity') LIMIT 20 OFFSET 0) subquery_for_count[0m  [["whodunnit", "1"]]
+  Rendered shared/_recently.html.haml (2.9ms)
+  Rendered layouts/_sidebar.html.haml (94.8ms)
+  Rendered layouts/_tabbed.html.haml (105.7ms)
+  Rendered layouts/_about.html.haml (4.4ms)
+  Rendered layouts/_footer.html.haml (10.6ms)
+  [1m[35mSetting Load (0.5ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "base_url"]]
+Completed 200 OK in 2565ms (Views: 2332.7ms | ActiveRecord: 70.1ms)
+
+
+Started GET "/contacts" for 127.0.0.1 at 2016-12-15 12:56:44 +0100
+Processing by ContactsController#index as HTML
+  [1m[36mUser Load (0.9ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPreference Load (0.4ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "locale"], ["user_id", 1]]
+  [1m[36mSetting Load (1.4ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "locale"]]
+  [1m[35mPreference Load (2.0ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "contacts_per_page"], ["user_id", 1]]
+  [1m[36mPreference Load (0.4ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "contacts_sort_by"], ["user_id", 1]]
+  [1m[35mPreference Load (0.3ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "contacts_naming"], ["user_id", 1]]
+  [1m[36mSetting Load (0.4ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "user_signup"]]
+  [1m[35m (1.8ms)[0m  SELECT DISTINCT COUNT(DISTINCT "contacts"."id") FROM "contacts" WHERE ('t'='t')
+  Rendered shared/_inline_styles.html.haml (0.4ms)
+  [1m[36mPreference Load (1.8ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "contacts_index_view"], ["user_id", 1]]
+  Rendered entities/_title_bar.html.haml (20.6ms)
+  Rendered entities/_basic_search.html.haml (2.1ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_sort_fields.html.erb (102.1ms)
+  [1m[35mFieldGroup Load (0.5ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (1.1ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mSetting Load (0.4ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "account_category"]]
+  [1m[36mFieldGroup Load (1.0ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Account"]]
+  [1m[35mField Load (0.5ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 1]]
+  [1m[36mSetting Load (0.5ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "opportunity_stage"]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Opportunity"]]
+  [1m[36mField Load (0.6ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 5]]
+  [1m[35mFieldGroup Load (0.6ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Task"]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (384.2ms)
+  [1m[36mCACHE (0.2ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Contact"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 3]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Account"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 1]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (66.3ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_grouping_fields.html.erb (496.8ms)
+  [1m[35mCACHE (0.1ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Opportunity"]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 5]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Task"]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (72.9ms)
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Contact"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 3]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Account"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 1]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_condition_fields.html.erb (49.2ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_grouping_fields.html.erb (145.1ms)
+  Rendered /home/dev/.rvm/gems/ruby-2.2.2@ffcrm/gems/ransack_ui-1.3.4/app/views/ransack_ui/_search.html.erb (777.1ms)
+  Rendered entities/_search.html.haml (797.6ms)
+  [1m[35mCACHE (0.1ms)[0m  SELECT DISTINCT COUNT(DISTINCT "contacts"."id") FROM "contacts" WHERE ('t'='t')
+  Rendered shared/_empty.html.haml (1.3ms)
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT DISTINCT COUNT(DISTINCT "contacts"."id") FROM "contacts" WHERE ('t'='t')[0m
+  Rendered shared/_paginate_with_per_page.html.haml (5.6ms)
+  Rendered shared/_export.html.haml (2.4ms)
+  Rendered contacts/index.html.haml within layouts/application (893.7ms)
+  [1m[35mUser Load (1.2ms)[0m  SELECT "users".* FROM "users"
+  Rendered layouts/_jumpbox.html.haml (1.6ms)
+  Rendered layouts/_header.html.haml (14.8ms)
+  Rendered contacts/_sidebar_index.html.haml (1.0ms)
+  [1m[36mList Load (0.5ms)[0m  [1mSELECT "lists".* FROM "lists" WHERE "lists"."user_id" IS NULL[0m
+  Rendered lists/_sidebar.html.haml (14.1ms)
+  [1m[35mList Load (0.4ms)[0m  SELECT "lists".* FROM "lists" WHERE "lists"."user_id" = $1  [["user_id", 1]]
+  Rendered lists/_sidebar.html.haml (7.9ms)
+  Rendered lists/_lists.html.haml (33.5ms)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(count_column) FROM (SELECT  1 AS count_column FROM "versions" WHERE "versions"."whodunnit" = $1 AND "versions"."item_type" IN ('Account', 'Campaign', 'Contact', 'Lead', 'Opportunity') LIMIT 20 OFFSET 0) subquery_for_count[0m  [["whodunnit", "1"]]
+  Rendered shared/_recently.html.haml (3.1ms)
+  Rendered layouts/_sidebar.html.haml (56.0ms)
+  Rendered layouts/_tabbed.html.haml (70.6ms)
+  Rendered layouts/_about.html.haml (1.6ms)
+  Rendered layouts/_footer.html.haml (8.2ms)
+  [1m[35mSetting Load (0.5ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "base_url"]]
+Completed 200 OK in 2234ms (Views: 2111.8ms | ActiveRecord: 54.2ms)
+
+
+Started GET "/contacts?utf8=%E2%9C%93&q%5Bs%5D%5B0%5D%5Bname%5D=&q%5Bs%5D%5B0%5D%5Bdir%5D=asc&q%5Bg%5D%5B0%5D%5Bm%5D=and&q%5Bg%5D%5B0%5D%5Bc%5D%5B0%5D%5Ba%5D%5B0%5D%5Bname%5D=&q%5Bg%5D%5B0%5D%5Bc%5D%5B0%5D%5Bv%5D%5B0%5D%5Bvalue%5D=&distinct=1&page=1" for 127.0.0.1 at 2016-12-15 12:56:50 +0100
+Processing by ContactsController#index as JS
+  Parameters: {"utf8"=>"✓", "q"=>{"s"=>{"0"=>{"name"=>"", "dir"=>"asc"}}, "g"=>{"0"=>{"m"=>"and", "c"=>{"0"=>{"a"=>{"0"=>{"name"=>""}}, "v"=>{"0"=>{"value"=>""}}}}}}}, "distinct"=>"1", "page"=>"1"}
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPreference Load (3.0ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "locale"], ["user_id", 1]]
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "locale"]]
+  [1m[35mPreference Load (0.3ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "contacts_per_page"], ["user_id", 1]]
+  [1m[36mPreference Load (0.3ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "contacts_sort_by"], ["user_id", 1]]
+  [1m[35mPreference Load (2.0ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "contacts_naming"], ["user_id", 1]]
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "user_signup"]]
+  [1m[35m (0.7ms)[0m  SELECT DISTINCT COUNT(DISTINCT "contacts"."id") FROM "contacts" WHERE ('t'='t')
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT DISTINCT COUNT(DISTINCT "contacts"."id") FROM "contacts" WHERE ('t'='t')[0m
+  Rendered shared/_empty.html.haml (4.4ms)
+  [1m[35mCACHE (0.0ms)[0m  SELECT DISTINCT COUNT(DISTINCT "contacts"."id") FROM "contacts" WHERE ('t'='t')
+  Rendered shared/_paginate_with_per_page.html.haml (14.6ms)
+  Rendered shared/_export.html.haml (7.7ms)
+  Rendered text template (0.0ms)
+  Rendered contacts/index.js.haml (71.9ms)
+Completed 200 OK in 213ms (Views: 152.7ms | ActiveRecord: 7.7ms)
+  [1m[36mSetting Load (0.7ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "smtp"]]
+  [1m[35mSetting Load (0.8ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "secret_token"]]
+  [1m[36mFieldGroup Load (0.5ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Lead"]]
+  [1m[35mField Load (0.6ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 4]]
+  [1m[36mFieldGroup Load (0.8ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mField Load (0.9ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mFieldGroup Load (0.6ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  [1m[35mFieldGroup Load (0.6ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mField Load (0.5ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mFieldGroup Load (1.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (0.6ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mCustomField Load (0.5ms)[0m  SELECT  "fields".* FROM "fields" WHERE "fields"."type" IN ('CustomField')  ORDER BY "fields"."id" ASC LIMIT 1000
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.3ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (4.1ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'account_contacts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.7ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'account_opportunities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.4ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'accounts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'activities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.7ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'addresses'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (3.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'avatars'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.8ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'campaigns'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.5ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'comments'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (3.1ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'contact_opportunities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'contacts'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (3.0ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'emails'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.9ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'field_groups'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.4ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'fields'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.5ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'groups'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.5ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'groups_users'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.5ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'leads'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.6ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'lists'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.6ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'opportunities'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.3ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'permissions'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.5ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'preferences'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.5ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'sessions'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.7ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'settings'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (2.4ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'taggings'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.4ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'tags'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (3.0ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'tasks'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[35m (2.7ms)[0m  SELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'users'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+
+  [1m[36m (3.7ms)[0m  [1mSELECT t2.oid::regclass::text AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+FROM pg_constraint c
+JOIN pg_class t1 ON c.conrelid = t1.oid
+JOIN pg_class t2 ON c.confrelid = t2.oid
+JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+JOIN pg_namespace t3 ON c.connamespace = t3.oid
+WHERE c.contype = 'f'
+  AND t1.relname = 'versions'
+  AND t3.nspname = ANY (current_schemas(false))
+ORDER BY c.conname
+[0m
+  [1m[36mSetting Load (2.1ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "smtp"]]
+  [1m[35mSetting Load (0.5ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "secret_token"]]
+  [1m[36mFieldGroup Load (0.7ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Lead"]]
+  [1m[35mField Load (0.6ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 4]]
+  [1m[36mFieldGroup Load (0.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mField Load (0.6ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mFieldGroup Load (0.7ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mField Load (0.4ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mFieldGroup Load (0.5ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (0.4ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mCustomField Load (0.5ms)[0m  SELECT  "fields".* FROM "fields" WHERE "fields"."type" IN ('CustomField')  ORDER BY "fields"."id" ASC LIMIT 1000
+  [1m[36mUser Load (0.7ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."username" = $1 LIMIT 1[0m  [["username", "admin"]]
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mUser Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "users" WHERE ("users"."email" = 'admin@example.com' AND "users"."id" != 1) LIMIT 1[0m
+  [1m[35mUser Exists (0.8ms)[0m  SELECT  1 AS one FROM "users" WHERE (LOWER("users"."username") = LOWER('admin') AND "users"."id" != 1) LIMIT 1
+  [1m[36mUser Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "users" WHERE ("users"."persistence_token" = '1deb323ccafaed4415c2c4f1d4fdc672a753dafaaf280579c4f8972eb747f240b3eddd5186aa30815854db7605a89b683198dfcd7ce60e3ce7244164107b9c0c' AND "users"."id" != 1) LIMIT 1[0m
+  [1m[35mSQL (0.5ms)[0m  UPDATE "users" SET "password_salt" = $1, "password_hash" = $2, "persistence_token" = $3, "email" = $4, "perishable_token" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["password_salt", "GatmQRnkoJFjgobwTmqq"], ["password_hash", "64f690314eccaec0ecb75bc2cf9311a75778a2129a830356f3947ef85bf1365363e032e85f90ce501bee4b56d18ac02aa783722f116fe5b27e3afd68cd3cc6fa"], ["persistence_token", "1deb323ccafaed4415c2c4f1d4fdc672a753dafaaf280579c4f8972eb747f240b3eddd5186aa30815854db7605a89b683198dfcd7ce60e3ce7244164107b9c0c"], ["email", "admin@example.com"], ["perishable_token", "wHn2efellRklhnnhyWr"], ["updated_at", "2016-12-15 14:48:38.080189"], ["id", 1]]
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO "versions" ("event", "object", "created_at", "object_changes", "item_id", "item_type") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["event", "update"], ["object", "---\nid: 1\nusername: admin\nemail: adminuser@gmail.com\nfirst_name: \nlast_name: \ntitle: \ncompany: \nalt_email: \nphone: \nmobile: \naim: \nyahoo: \ngoogle: \nskype: \npassword_hash: 921b0bf54b585fbdf54d02455bb4c9cd6f9897911c4fafd21363cf63711ee362af8c22c252b2bb94507dfaa357ee1a4590cacdf7bda4b41ad15e27079038a9f7\npassword_salt: pgXzdb1LPj5PeGLfuBrF\npersistence_token: 35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933\nperishable_token: ybyp0uMwtBdvgGO1AeL\nlast_login_at: \ncurrent_login_at: 2016-12-15 11:56:32.207153000 Z\nlast_login_ip: \ncurrent_login_ip: 127.0.0.1\nlogin_count: 1\ndeleted_at: \ncreated_at: 2016-12-15 11:52:07.607018000 Z\nupdated_at: 2016-12-15 11:56:32.482327000 Z\nadmin: true\nsuspended_at: \nsingle_access_token: w5mSrmDVdvrTKtFuXU0a\n"], ["created_at", "2016-12-15 14:48:38.080189"], ["object_changes", "---\npassword_salt:\n- pgXzdb1LPj5PeGLfuBrF\n- GatmQRnkoJFjgobwTmqq\npassword_hash:\n- 921b0bf54b585fbdf54d02455bb4c9cd6f9897911c4fafd21363cf63711ee362af8c22c252b2bb94507dfaa357ee1a4590cacdf7bda4b41ad15e27079038a9f7\n- 64f690314eccaec0ecb75bc2cf9311a75778a2129a830356f3947ef85bf1365363e032e85f90ce501bee4b56d18ac02aa783722f116fe5b27e3afd68cd3cc6fa\npersistence_token:\n- 35f638e5ba464375cc8037e8b4ac1100422aa1ed8f451e5e9bbfbb4bc50ee31c852bc2ad179f8824393dfe7ea1429e67aa4974a5d8d077129626fda8a80ae933\n- 1deb323ccafaed4415c2c4f1d4fdc672a753dafaaf280579c4f8972eb747f240b3eddd5186aa30815854db7605a89b683198dfcd7ce60e3ce7244164107b9c0c\nemail:\n- adminuser@gmail.com\n- admin@example.com\nupdated_at:\n- 2016-12-15 11:56:32.482327000 Z\n- 2016-12-15 14:48:38.080189347 Z\n"], ["item_id", 1], ["item_type", "User"]]
+  [1m[35mSQL (0.5ms)[0m  UPDATE "versions" SET "transaction_id" = $1 WHERE "versions"."id" = $2  [["transaction_id", 5], ["id", 5]]
+  [1m[36m (38.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mUPDATE "users" SET "perishable_token" = $1, "updated_at" = $2 WHERE "users"."id" = $3[0m  [["perishable_token", "KYfJf4KOjfpKvE4PFHfU"], ["updated_at", "2016-12-15 14:48:38.177144"], ["id", 1]]
+  [1m[35m (0.7ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  UPDATE "users" SET "perishable_token" = $1, "updated_at" = $2 WHERE "users"."id" = $3  [["perishable_token", "CSbWEBVwpR64uD5dAmvL"], ["updated_at", "2016-12-15 14:48:38.186242"], ["id", 1]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+  [1m[36mSetting Load (0.5ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "smtp"]]
+  [1m[35mSetting Load (0.3ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "secret_token"]]
+  [1m[36mFieldGroup Load (0.5ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Lead"]]
+  [1m[35mField Load (0.6ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 4]]
+  [1m[36mFieldGroup Load (0.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mField Load (0.4ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mFieldGroup Load (0.4ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mField Load (0.5ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (0.3ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mCustomField Load (0.9ms)[0m  SELECT  "fields".* FROM "fields" WHERE "fields"."type" IN ('CustomField')  ORDER BY "fields"."id" ASC LIMIT 1000
+  [1m[36mSetting Load (0.9ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "smtp"]]
+  [1m[35mSetting Load (0.4ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "secret_token"]]
+  [1m[36mFieldGroup Load (0.5ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Lead"]]
+  [1m[35mField Load (0.6ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 4]]
+  [1m[36mFieldGroup Load (0.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mField Load (0.4ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mFieldGroup Load (0.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mField Load (0.4ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mFieldGroup Load (0.4ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (0.3ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mCustomField Load (0.4ms)[0m  SELECT  "fields".* FROM "fields" WHERE "fields"."type" IN ('CustomField')  ORDER BY "fields"."id" ASC LIMIT 1000
+  [1m[36mUser Load (1.1ms)[0m  [1mSELECT  "users".* FROM "users"  ORDER BY "users"."id" ASC LIMIT 1[0m
+  [1m[36mSetting Load (2.7ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "smtp"]]
+  [1m[35mSetting Load (0.4ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "secret_token"]]
+  [1m[36mFieldGroup Load (0.6ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Lead"]]
+  [1m[35mField Load (14.8ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 4]]
+  [1m[36mFieldGroup Load (0.3ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Opportunity"]]
+  [1m[35mField Load (1.2ms)[0m  SELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC  [["field_group_id", 5]]
+  [1m[36mFieldGroup Load (0.4ms)[0m  [1mSELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC[0m  [["klass_name", "Task"]]
+  [1m[35mFieldGroup Load (0.3ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Account"]]
+  [1m[36mField Load (0.4ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 1]]
+  [1m[35mFieldGroup Load (0.4ms)[0m  SELECT "field_groups".* FROM "field_groups" WHERE "field_groups"."klass_name" = $1  ORDER BY "field_groups"."position" ASC  [["klass_name", "Contact"]]
+  [1m[36mField Load (0.7ms)[0m  [1mSELECT "fields".* FROM "fields" WHERE "fields"."field_group_id" = $1  ORDER BY "fields"."position" ASC[0m  [["field_group_id", 3]]
+  [1m[35mCustomField Load (0.5ms)[0m  SELECT  "fields".* FROM "fields" WHERE "fields"."type" IN ('CustomField')  ORDER BY "fields"."id" ASC LIMIT 1000
+
+
+Started GET "/" for 127.0.0.1 at 2016-12-16 06:41:44 +0100
+  [1m[36mActiveRecord::SchemaMigration Load (1.9ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by HomeController#index as HTML
+  [1m[35mUser Load (3.3ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+Redirected to http://localhost:3000/login
+Filter chain halted as :require_user rendered or redirected
+Completed 302 Found in 1659ms (ActiveRecord: 26.8ms)
+
+
+Started GET "/login" for 127.0.0.1 at 2016-12-16 06:41:46 +0100
+Processing by AuthenticationsController#new as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mCACHE (0.3ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mSetting Load (0.4ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "locale"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mCACHE (0.1ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mSetting Load (0.9ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "user_signup"]]
+  Rendered authentications/new.html.haml within layouts/application (29.1ms)
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mCACHE (0.1ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  Rendered layouts/_header.html.haml (140.3ms)
+  Rendered layouts/_about.html.haml (115.8ms)
+  Rendered layouts/_footer.html.haml (149.0ms)
+  Rendered layouts/_tabless.html.haml (216.3ms)
+  [1m[35mSetting Load (5.1ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "base_url"]]
+Completed 200 OK in 24589ms (Views: 24555.5ms | ActiveRecord: 7.7ms)
+
+
+Started POST "/authentication" for 127.0.0.1 at 2016-12-16 06:42:35 +0100
+Processing by AuthenticationsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"65YvVSH8gTaz87LxspgD9Qjc8vlKfOgLPN4e6y3PDy8V5nNC3gM6cCGP/fJVAvPiOylid6jitr4WJN1UXitmTg==", "authentication"=>{"username"=>"admin", "password"=>"[FILTERED]", "remember_me"=>"0"}}
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mSetting Load (2.1ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "locale"]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", "1"]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", "1"]]
+  [1m[35mUser Load (1.6ms)[0m  SELECT  "users".* FROM "users" WHERE LOWER("users"."username") = LOWER('admin')  ORDER BY "users"."id" ASC LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (9.1ms)[0m  UPDATE "users" SET "login_count" = $1, "last_login_at" = $2, "current_login_at" = $3, "last_login_ip" = $4, "perishable_token" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["login_count", 2], ["last_login_at", "2016-12-15 11:56:32.207153"], ["current_login_at", "2016-12-16 05:42:35.430651"], ["last_login_ip", "127.0.0.1"], ["perishable_token", "fD5WglFFwmvFBbmYB3qR"], ["updated_at", "2016-12-16 05:42:35.434952"], ["id", 1]]
+  [1m[36mSQL (36.4ms)[0m  [1mINSERT INTO "versions" ("event", "object", "created_at", "object_changes", "item_id", "item_type") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["event", "update"], ["object", "---\nid: 1\nusername: admin\nemail: admin@example.com\nfirst_name: \nlast_name: \ntitle: \ncompany: \nalt_email: \nphone: \nmobile: \naim: \nyahoo: \ngoogle: \nskype: \npassword_hash: 64f690314eccaec0ecb75bc2cf9311a75778a2129a830356f3947ef85bf1365363e032e85f90ce501bee4b56d18ac02aa783722f116fe5b27e3afd68cd3cc6fa\npassword_salt: GatmQRnkoJFjgobwTmqq\npersistence_token: 1deb323ccafaed4415c2c4f1d4fdc672a753dafaaf280579c4f8972eb747f240b3eddd5186aa30815854db7605a89b683198dfcd7ce60e3ce7244164107b9c0c\nperishable_token: CSbWEBVwpR64uD5dAmvL\nlast_login_at: \ncurrent_login_at: 2016-12-15 11:56:32.207153000 Z\nlast_login_ip: \ncurrent_login_ip: 127.0.0.1\nlogin_count: 1\ndeleted_at: \ncreated_at: 2016-12-15 11:52:07.607018000 Z\nupdated_at: 2016-12-15 14:48:38.186242000 Z\nadmin: true\nsuspended_at: \nsingle_access_token: w5mSrmDVdvrTKtFuXU0a\n"], ["created_at", "2016-12-16 05:42:35.434952"], ["object_changes", "---\nlogin_count:\n- 1\n- 2\nlast_login_at:\n- \n- &1 2016-12-15 11:56:32.207153000 Z\ncurrent_login_at:\n- *1\n- 2016-12-16 05:42:35.430651234 Z\nlast_login_ip:\n- \n- 127.0.0.1\nupdated_at:\n- 2016-12-15 14:48:38.186242000 Z\n- 2016-12-16 05:42:35.434952786 Z\n"], ["item_id", 1], ["item_type", "User"]]
+  [1m[35mSQL (2.3ms)[0m  UPDATE "versions" SET "transaction_id" = $1 WHERE "versions"."id" = $2  [["transaction_id", 6], ["id", 6]]
+  [1m[36m (1.1ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/
+Completed 302 Found in 316ms (ActiveRecord: 71.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2016-12-16 06:42:35 +0100
+Processing by HomeController#index as HTML
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mPreference Load (21.0ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "locale"], ["user_id", 1]]
+  [1m[35mSetting Load (0.8ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "locale"]]
+  [1m[36mPreference Load (2.3ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_asset"], ["user_id", 1]]
+  [1m[35mPreference Load (0.8ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "activity_event"], ["user_id", 1]]
+  [1m[36mPreference Load (1.5ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_user"], ["user_id", 1]]
+  [1m[35mPreference Load (0.4ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "activity_duration"], ["user_id", 1]]
+  [1m[36mVersion Load (1.1ms)[0m  [1mSELECT  "versions".* FROM "versions" WHERE (versions.created_at >= '2016-12-14 05:42:35.836855')  ORDER BY created_at DESC LIMIT 500[0m
+  [1m[35mUser Load (0.6ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" IN (NULL)
+  [1m[36mUser Load (0.6ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" IN (1)[0m
+  [1m[35mSetting Load (0.5ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "account_category_color"]]
+  [1m[36mSetting Load (0.2ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "opportunity_stage_color"]]
+  [1m[35mSetting Load (0.3ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "task_category_color"]]
+  Rendered shared/_inline_styles.html.haml (8.0ms)
+  [1m[36m (7.5ms)[0m  [1mSELECT COUNT(*) FROM "tasks" WHERE ((user_id = 1 AND assigned_to IS NULL) OR assigned_to = 1) AND (completed_at IS NULL)[0m
+  [1m[35m (1.4ms)[0m  SELECT COUNT(*) FROM "opportunities" WHERE ((user_id = 1 AND assigned_to IS NULL) OR assigned_to = 1) AND (opportunities.stage != 'won') AND (opportunities.stage != 'lost')
+  [1m[36m (1.7ms)[0m  [1mSELECT COUNT(*) FROM "accounts" WHERE ((user_id = 1 AND assigned_to IS NULL) OR assigned_to = 1)[0m
+  Rendered home/_activity.html.haml (7.2ms)
+  Rendered shared/_export.html.haml (2.8ms)
+  Rendered home/index.html.haml within layouts/application (244.5ms)
+  [1m[35mUser Load (0.6ms)[0m  SELECT "users".* FROM "users"
+  Rendered layouts/_jumpbox.html.haml (7.6ms)
+  Rendered layouts/_header.html.haml (16.7ms)
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "tabs"]]
+  [1m[35mList Load (9.5ms)[0m  SELECT "lists".* FROM "lists" WHERE "lists"."user_id" IS NULL
+  Rendered lists/_sidebar.html.haml (76.2ms)
+  [1m[36mList Load (0.4ms)[0m  [1mSELECT "lists".* FROM "lists" WHERE "lists"."user_id" = $1[0m  [["user_id", 1]]
+  Rendered lists/_sidebar.html.haml (11.9ms)
+  Rendered lists/_lists.html.haml (106.2ms)
+  [1m[35m (1.3ms)[0m  SELECT COUNT(count_column) FROM (SELECT  1 AS count_column FROM "versions" WHERE "versions"."whodunnit" = $1 AND "versions"."item_type" IN ('Account', 'Campaign', 'Contact', 'Lead', 'Opportunity') LIMIT 20 OFFSET 0) subquery_for_count  [["whodunnit", "1"]]
+  Rendered shared/_recently.html.haml (15.7ms)
+  Rendered layouts/_sidebar.html.haml (140.1ms)
+  Rendered layouts/_tabbed.html.haml (154.7ms)
+  Rendered layouts/_about.html.haml (1.2ms)
+  Rendered layouts/_footer.html.haml (7.2ms)
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1[0m  [["name", "base_url"]]
+Completed 200 OK in 4741ms (Views: 4318.8ms | ActiveRecord: 234.8ms)
+
+
+Started GET "/home/options?cancel=false" for 127.0.0.1 at 2016-12-16 06:42:54 +0100
+Processing by HomeController#options as JS
+  Parameters: {"cancel"=>"false"}
+  [1m[35mUser Load (0.6ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mPreference Load (0.4ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "locale"], ["user_id", 1]]
+  [1m[35mSetting Load (0.2ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "locale"]]
+  [1m[36mPreference Load (0.6ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_asset"], ["user_id", 1]]
+  [1m[35mPreference Load (0.3ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "activity_event"], ["user_id", 1]]
+  [1m[36mPreference Load (0.3ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_user"], ["user_id", 1]]
+  [1m[35mPreference Load (0.2ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "activity_duration"], ["user_id", 1]]
+  Rendered home/_assets_menu.html.haml (7.5ms)
+  Rendered home/_events_menu.html.haml (3.4ms)
+  [1m[36mUser Load (1.5ms)[0m  [1mSELECT "users".* FROM "users"  ORDER BY first_name, last_name[0m
+  Rendered home/_users_menu.html.haml (148.3ms)
+  Rendered home/_duration_menu.html.haml (3.7ms)
+  Rendered home/_options.html.haml (442.3ms)
+  Rendered home/options.js.haml (487.9ms)
+Completed 200 OK in 573ms (Views: 556.7ms | ActiveRecord: 4.1ms)
+
+
+Started POST "/home/redraw" for 127.0.0.1 at 2016-12-16 06:42:59 +0100
+Processing by HomeController#redraw as */*
+  Parameters: {"event"=>"view"}
+  [1m[35mUser Load (0.7ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mPreference Load (0.4ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "locale"], ["user_id", 1]]
+  [1m[35mSetting Load (0.3ms)[0m  SELECT  "settings".* FROM "settings" WHERE "settings"."name" = $1 LIMIT 1  [["name", "locale"]]
+  [1m[36mPreference Load (0.4ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_event"], ["user_id", 1]]
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (28.7ms)[0m  [1mINSERT INTO "preferences" ("user_id", "name", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["user_id", 1], ["name", "activity_event"], ["value", "BAhJIgl2aWV3BjoGRVQ=\n"], ["created_at", "2016-12-16 05:42:59.339603"], ["updated_at", "2016-12-16 05:42:59.339603"]]
+  [1m[35m (2.9ms)[0m  COMMIT
+  [1m[36mPreference Load (0.5ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_asset"], ["user_id", 1]]
+  [1m[35mPreference Load (0.3ms)[0m  SELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1  [["name", "activity_user"], ["user_id", 1]]
+  [1m[36mPreference Load (0.2ms)[0m  [1mSELECT  "preferences".* FROM "preferences" WHERE "preferences"."name" = $1 AND "preferences"."user_id" = $2 LIMIT 1[0m  [["name", "activity_duration"], ["user_id", 1]]
+  [1m[35mVersion Load (0.4ms)[0m  SELECT  "versions".* FROM "versions" WHERE "versions"."event" = $1 AND (versions.created_at >= '2016-12-14 05:42:59.377907')  ORDER BY created_at DESC LIMIT 500  [["event", "view"]]
+  Rendered shared/_export.html.haml (3.0ms)
+  Rendered home/index.js.haml (16.8ms)
+Completed 200 OK in 99ms (Views: 44.4ms | ActiveRecord: 35.1ms)

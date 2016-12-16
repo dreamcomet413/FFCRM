@@ -1,0 +1,64 @@
+I"Z(function() {
+  if (window.Ransack == null) {
+    window.Ransack = {};
+  }
+
+  Ransack.predicates = {
+    eq: 'not_eq',
+    cont: 'not_cont',
+    matches: 'does_not_match',
+    start: 'not_start',
+    end: 'not_end',
+    present: 'blank',
+    "null": 'not_null',
+    lt: 'gteq',
+    gt: 'lteq',
+    "in": 'not_in',
+    "true": 'false'
+  };
+
+  Ransack.type_predicates = {};
+
+  (function(o, f) {
+    return f.call(o);
+  })(Ransack.type_predicates, function() {
+    this.text = this.string = ['eq', 'cont', 'matches', 'start', 'end', 'present', 'in'];
+    this.boolean = ['true', 'null'];
+    this.integer = this.float = this.decimal = ['eq', 'null', 'lt', 'gt', 'in'];
+    return this.date = this.datetime = this.time = ['eq', 'null', 'lt', 'gt'];
+  });
+
+  Ransack.predicate_inputs = {};
+
+  (function(o, f) {
+    return f.call(o);
+  })(Ransack.predicate_inputs, function() {
+    this.cont = this.matches = this.start = this.end = this["in"] = 'string';
+    this.present = this["null"] = this["true"] = false;
+    return this.eq = this.gt = this.lt = function(type) {
+      switch (type) {
+        case 'string':
+        case 'text':
+          return 'string';
+        case 'integer':
+        case 'float':
+        case 'decimal':
+          return 'numeric';
+        case 'date':
+        case 'datetime':
+        case 'time':
+          return type;
+        default:
+          return false;
+      }
+    };
+  });
+
+  Ransack.option_predicates = ['eq', 'eq_any', 'not_eq', 'not_eq_all', 'null', 'not_null'];
+
+  if (typeof Select2 !== "undefined" && Select2 !== null) {
+    Ransack.predicate_inputs["in"] = 'tags';
+  }
+
+}).call(this);
+:ET

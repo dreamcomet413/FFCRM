@@ -1,0 +1,53 @@
+I"|(function() {
+  (function($) {
+    $(document).on("click", ".lists .list_save a", function() {
+      var $list;
+      $list = $(this).closest('.lists');
+      $list.find(".list_form").show().find("[name='list[name]']").focus();
+      $list.find(".list_save").hide();
+      return false;
+    });
+    $(document).on("click", ".lists .cancel", function() {
+      var $list;
+      $list = $(this).closest('.lists');
+      $list.find(".list_form").hide();
+      $list.find(".list_save").show();
+      return false;
+    });
+    $(document).on("click", ".lists .list_form [type=submit]", function() {
+      var $form;
+      $form = $(this).closest('form');
+      $form.find("[name='list[url]']").val(window.location.pathname + '?' + $('form.ransack_search').serialize());
+      return true;
+    });
+    $(document).on("submit", ".lists .list_form [type=submit]", function() {
+      var $form;
+      $form = $(this).closest('form');
+      return $form.find("[type=submit]").prop('disabled', true);
+    });
+    $(document).on("mouseover", ".lists li", function() {
+      var icon, iconText;
+      icon = $(this).find('.delete_on_hover i.fa');
+      iconText = crm.get_icon(icon.attr('data-controller'));
+      return icon.removeClass(iconText).addClass('fa-times-circle');
+    });
+    $(document).on("mouseout", ".lists li", function() {
+      var icon, iconText;
+      icon = $(this).find('.delete_on_hover i.fa');
+      iconText = crm.get_icon(icon.attr('data-controller'));
+      return icon.removeClass('fa-times-circle').addClass(iconText);
+    });
+    return $(document).on('click', '#search .tabs a', function() {
+      var search_form;
+      search_form = $(this).data('search-form');
+      switch (search_form) {
+        case 'basic_search':
+          return $('.lists .list_save').hide();
+        case 'advanced_search':
+          return $('.lists .list_save').show();
+      }
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

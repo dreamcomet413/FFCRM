@@ -1,0 +1,38 @@
+I"v(function() {
+  (function($) {
+    window.crm || (window.crm = {});
+    return crm.textarea_user_autocomplete = function(el_id) {
+      if (!$("#areacomplete_" + el_id)[0]) {
+        return $("#" + el_id).areacomplete({
+          wordCount: 1,
+          mode: "outter",
+          on: {
+            query: function(text, cb) {
+              var i, name_query, words;
+              if (text.indexOf("@") !== 0) {
+                return [];
+              }
+              words = [];
+              i = 0;
+              while (i < _ffcrm_users.length) {
+                name_query = text.replace("@", "").toLowerCase();
+                if (_ffcrm_users[i].toLowerCase().indexOf(name_query) !== -1) {
+                  words.push(_ffcrm_users[i]);
+                }
+                i++;
+              }
+              return cb(words, text.replace("@", ""));
+            },
+            selected: function(text, data) {
+              var username_regEx;
+              username_regEx = new RegExp("\\((@[^)]+)\\)");
+              return text.match(username_regEx)[1];
+            }
+          }
+        });
+      }
+    };
+  })(jQuery);
+
+}).call(this);
+:ET

@@ -1,0 +1,25 @@
+I"r(function() {
+  (function($) {
+    window.crm || (window.crm = {});
+    crm.makeAjaxChosen = function() {
+      return $("select.ajax_chosen").each(function() {
+        return $(this).ajaxChosen({
+          url: $(this).data('url'),
+          jsonTermKey: "auto_complete_query",
+          minTermLength: 2
+        }, null, {
+          allow_single_deselect: true,
+          show_on_activate: true
+        });
+      });
+    };
+    $(document).ready(function() {
+      return crm.makeAjaxChosen();
+    });
+    return $(document).ajaxComplete(function() {
+      return crm.makeAjaxChosen();
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

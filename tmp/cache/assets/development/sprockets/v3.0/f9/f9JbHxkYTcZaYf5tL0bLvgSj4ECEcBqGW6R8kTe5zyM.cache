@@ -1,0 +1,41 @@
+I"ß(function() {
+  (function($) {
+    window.crm || (window.crm = {});
+    crm.init_sortables = function() {
+      return $('[data-sortable]').each(function() {
+        var $el, checkEmpty;
+        $el = $(this);
+        checkEmpty = function() {
+          return $el.children('.empty').toggle($el.sortable('toArray').length === 1);
+        };
+        return $el.sortable({
+          forcePlaceholderSize: true,
+          connectWith: $el.data('sortable-connect-with'),
+          handle: $el.data('sortable-handle'),
+          create: checkEmpty,
+          update: function() {
+            var data, dom_id, ids, _i, _len, _ref;
+            ids = [];
+            _ref = $el.sortable('toArray');
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              dom_id = _ref[_i];
+              ids.push(dom_id.replace(/[^\d]/g, ''));
+            }
+            data = {};
+            data[$el.attr('id')] = ids;
+            $.post($el.attr('data-sortable'), data);
+            return checkEmpty();
+          }
+        });
+      });
+    };
+    $(document).ready(function() {
+      return crm.init_sortables();
+    });
+    return $(document).ajaxComplete(function() {
+      return crm.init_sortables();
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

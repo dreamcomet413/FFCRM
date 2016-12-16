@@ -1,0 +1,17 @@
+I"½(function() {
+  (function($) {
+    $(function() {
+      $.timeago.settings.allowFuture = true;
+      $.timeago.settings.strings = $.timeago.settings.locales[crm.language];
+      $("span.timeago").timeago();
+      return setInterval((function() {
+        return $("span.timeago").timeago();
+      }), 60000);
+    });
+    return $(document).ajaxComplete(function() {
+      return $("span.timeago").timeago();
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

@@ -1,0 +1,60 @@
+I"(function() {
+  (function($) {
+    $(document).on("click", "*[data-tab-class]", function(event) {
+      var $el, klass;
+      event.preventDefault();
+      $el = $(this);
+      $(".fields").each(function() {
+        return $(this).hide();
+      });
+      $(".inline_tabs ul li").each(function() {
+        return $(this).removeClass("selected");
+      });
+      klass = $el.data("tab-class");
+      $("#" + klass + "_section").show();
+      return $el.addClass("selected");
+    });
+    $(document).on('change', '.fields select[name="field[as]"]', function() {
+      return $.ajax({
+        url: '/admin/fields/subform?' + $(this).parents('form').serialize(),
+        dataType: 'html',
+        context: $(this).closest('form').find('.subform'),
+        success: function(data) {
+          $(this).html(data);
+          return $(this).find('input').first().focus();
+        }
+      });
+    });
+    $(document).on('click', '.fields a.create', function() {
+      var field_group;
+      $('.edit_field').hide();
+      field_group = $(this).closest('.field_group');
+      field_group.find('.empty').hide();
+      field_group.find('.create .arrow').html(crm.EXPANDED);
+      field_group.find('.create_field').slideDown().find('input[name="field[label]"]').focus();
+      return false;
+    });
+    $(document).on('click', '.create_field a.close, .create_field a.cancel', function() {
+      $(this).closest('.create_field').hide();
+      $(this).closest('.field_group').find('.create .arrow').html(crm.COLLAPSED);
+      return false;
+    });
+    $(document).on('click', '.fields a.edit', function() {
+      $('.edit_field').hide();
+      $.ajax({
+        url: $(this).attr('href'),
+        context: $(this).closest('li').find('div.edit_field'),
+        success: function(data) {
+          return $(this).replaceWith(data).first().focus();
+        }
+      });
+      return false;
+    });
+    return $(document).on('click', '.edit_field a.close, .edit_field a.cancel', function() {
+      $(this).closest('.edit_field').hide();
+      return false;
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

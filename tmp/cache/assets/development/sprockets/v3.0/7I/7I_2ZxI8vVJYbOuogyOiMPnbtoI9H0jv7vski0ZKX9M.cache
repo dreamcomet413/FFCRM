@@ -1,0 +1,24 @@
+I"ƒ(function() {
+  (function($) {
+    window.crm || (window.crm = {});
+    crm.toggle_open_id_login = function(first_field) {
+      if (first_field == null) {
+        first_field = "#authentication_openid_identifier";
+      }
+      $("#login").toggle();
+      $("#openid").toggle();
+      $("#login_link").toggle();
+      $("#openid_link").toggle();
+      return $(first_field).focus();
+    };
+    return crm.toggle_open_id_signup = function() {
+      $("#login").toggle();
+      $("#openid").toggle();
+      $("#login_link").toggle();
+      $("#openid_link").toggle();
+      return $("#user_email").focus();
+    };
+  })(jQuery);
+
+}).call(this);
+:ET

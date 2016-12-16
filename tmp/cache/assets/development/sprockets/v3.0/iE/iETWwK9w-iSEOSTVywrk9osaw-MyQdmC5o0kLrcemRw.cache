@@ -1,0 +1,47 @@
+I"Ô(function() {
+  (function($) {
+    return $(function() {
+      $("#advanced_search").ransack_search_form();
+      $('#query').focusin(function(e) {
+        return $(this).data('placeholder', $(this).attr('placeholder')).attr('placeholder', '');
+      });
+      $('#query').focusout(function(e) {
+        return $(this).attr('placeholder', $(this).data('placeholder'));
+      });
+      $(document).ajaxComplete(function() {
+        if ($('.ransack_search').length) {
+          $("#loading").hide();
+          return $("#advanced_search").css('opacity', 1);
+        }
+      });
+      $(document).on('click', '#search .tabs a', function() {
+        var query_input, search_form, value;
+        search_form = $(this).data('search-form');
+        $('#search .search_form').hide();
+        $('#search .tabs li a').removeClass('active');
+        $('#' + search_form).show();
+        $('a[data-search-form=' + search_form + ']').addClass('active');
+        switch (search_form) {
+          case 'basic_search':
+            query_input = $('#basic_search input#query');
+            if (!query_input.is('.defaultTextActive')) {
+              value = query_input.val();
+            } else {
+              value = "";
+            }
+            crm.search(value, window.controller);
+            $('#filters').prop('disabled', false);
+            break;
+          case 'advanced_search':
+            $('#advanced_search form input:submit').submit();
+            $('#filters').prop('disabled', true);
+        }
+      });
+      return $(document).on('click', '#advanced_search form input:submit', function() {
+        history.pushState("", "", window.location.pathname + '?' + $('form.ransack_search').serialize());
+      });
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

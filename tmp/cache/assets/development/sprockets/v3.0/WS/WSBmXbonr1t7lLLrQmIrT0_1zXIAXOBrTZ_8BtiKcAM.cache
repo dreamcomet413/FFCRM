@@ -1,0 +1,14 @@
+I"Ý(function() {
+  (function($) {
+    $(document).on('ajax:send', '.pagination, .per_page_options', function() {
+      $(this).find('a').prop('disabled', true);
+      return $(this).closest('#paginate').find('.spinner').show();
+    });
+    return $(document).on('ajax:complete', '.pagination, .per_page_options', function() {
+      $(this).find('a').prop('disabled', false);
+      return $(this).closest('#paginate').find('.spinner').hide();
+    });
+  })(jQuery);
+
+}).call(this);
+:ET

@@ -1,0 +1,20 @@
+I"Ô(function() {
+  (function($) {
+    $(document).on('click focus', 'input.date', function() {
+      return $(this).datepicker({
+        showOn: 'focus',
+        changeMonth: true,
+        dateFormat: 'yy-mm-dd'
+      });
+    });
+    return $(document).on('click focus', 'input.datetime', function() {
+      return $(this).datetimepicker({
+        showOn: 'focus',
+        changeMonth: true,
+        dateFormat: 'yy-mm-dd'
+      });
+    });
+  })(jQuery);
+
+}).call(this);
+:ET
